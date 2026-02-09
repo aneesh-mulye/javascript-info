@@ -10,7 +10,7 @@ My core resource is [javascript.info](http://javascript.info).
 
 ### My educational background
 
-I have a B.Eng. in Computer Engineering from the University of Pune (which is in some ways closer to a BS in CS from the USA), and an MS in CS from Georgia Tech. I finished my MS in 2013, ie, more than 12 years ago.
+I have a B.Eng. in Computer Engineering from the University of Pune, and an MS in CS from Georgia Tech. I finished my MS in 2013, ie, more than 12 years ago.
 
 I am a working programmer, and can be assumed to know foundational algorithmic and programming material. When I do not, I shall tell you so or ask for an explanation, so freely assume I know these things if required. My primary programming language is Clojure.
 
@@ -55,7 +55,7 @@ At the end of this, I want:
 2. A deep understanding of each concept, construct, and pattern . Concretely: that I have a clear mental conception of it and its subunits, and the interconnections between them, and its structure, both as pieces as well as in a unitary way; that is to say, that its pieces cohere into one mental object or chunk that is experienced as a singular 'understanding'.
 3. To be able to read code using any of these up to the mid-level engineer level.
 4. To be able to use the constructs and concepts in code up to the mid-level engineer level.
-5. To be able to instantly recall the entirety of every concept-construct-pattern in javascript.info; not merely as a rote operation, but as the summoning of a single mental object which I understand in a unitary way (to the extent possible), such that the distinction between recalling and re-proving collapses since the understanding itself is atomically available.
+5. To be able to instantly recall the entirety of every concept-construct-pattern in javascript.info; not merely as a rote operation, but as the summoning of a single mental object which I understand in a unitary way (to the extent possible), such that the distinction between recognising and recalling and using collapses since the understanding itself is atomically available.
 6. At the deepest level, to grasp Javascript as a multifaceted high-dimensional hyperobject, which I can internally manipulate and play with with ease, with fluency, tactilely; to 'see through' it in the way described by Michael Nielsen in his article "Using spaced repetition systems to see through a piece of mathematics"; and to get a 'sense' for it such that I can recognise and 'see' or 'feel' these structures wheresoever they occur, and be able to understand more deeply as a result that in which they so do.
 
 ## Process and pedagogy
@@ -65,14 +65,14 @@ I use:
 1. An LLM project context for clarifying my conceptual understanding through being quizzed on it.
 2. This repo for:
 	1. Code and construct reading and recognition and 'in my head' dry running.
-	2. Writing and using a concept/construct at all the levels from most basic example use to mid-level engineer.
+	2. Writing and using a concept/construct at all the levels from most basic example to mid-level engineer.
 3. An Anki deck for spaced repetition.
 
 ### Ankification and spaced repetition
 
 I am following a much simpler process than Nielsen here.
 
-When studying, I break down the material into (semi-)atomic key facts, concept checks, syntax for constructs, usage patterns for constructs, and gotchas, and when either when done with a study session or during it, I simply add it into Anki in the form of either normal or Cloze cards.
+When studying, I break down the material into (semi-)atomic key facts, concept checks, syntax for constructs, usage patterns for constructs, and gotchas, and either when done with a study session or during it, I simply add it into Anki in the form of either normal or Cloze cards.
 
 I use the [Better Markdown](https://ankiweb.net/shared/info/2100166052) normal and Cloze card formats. If and when I ask you to generate cards, use one of these types to generate the importable `.txt` format. Prefer Cloze when you can.
 
@@ -80,7 +80,7 @@ I use the [Better Markdown](https://ankiweb.net/shared/info/2100166052) normal a
 
 Studying consists of reading and working through the material on javascript.info (usually subsection by subsection).
 
-For background or enrichment text, I just read and go with the flow.
+For background or enrichment text, I just read it and go with the flow.
 
 For other material, I read and understand it properly to the best of my ability.
 
@@ -94,11 +94,11 @@ A given study session may have only part of these.
 
 When I ask you to generate snippets and stubs to test me on a given (sub)section or concept, construct, or pattern:
 
-Construct a graduated sequence of uses of it that start with a really simple example, and builds up in complexity at each step until we get to truly hairy stuff. Think through this carefully before you begin, so you have a clear idea of what kind of wrinkle or complexity or conceptual densification or sheer working memory demand to add at each step.
+Construct a graduated sequence of uses of it that start with a really simple example, and builds up in complexity at each step until we get to truly hairy stuff. Try to the extent you can to make this sequence between five to nine steps, except when it's is too simple to warrant it, or if it naturally requires more steps (say when the concept is intrinsically deep, or when there are lots of ways of using it in implementation, etc). Think through this carefully before you begin, so you have a clear idea of what kind of wrinkle or complexity or conceptual densification or sheer working memory demand to add at each step.
 
 For each step in this sequence, construct two source files (one for snippets and one for stubs):
 1. The snippets file containing: two code snippets containing and using the concept/construct/pattern in the (sub)section along with the calling code, and test me on my understanding of them in terms of being able to tell what they'd 'do', or output. These should be such that I can dry run them 'in my head', so to speak. Include a (comment) marker after each snippet where I can write what I think the output should be; you'll be evaluating me on this later after I've answered by editing the file. This file isn't meant to be run, but should be runnable if I want to check its actual output.
-2. The stubs file containing: two code stubs completing which would require me to use the concept/construct/pattern in accord with the core idea of that step. Specify what each stub is required to do in a comment just before it. After the stubs, include a comprehensive bunch of tests in the file such that I can run the file to test my solution. The tests should have instructive errors for if and when they fail.
+2. The stubs file containing: two code stubs completing which would require me to use the concept/construct/pattern in accord with the core idea of that step. Specify what each stub is required to do in a comment just before it. After the stubs, include a comprehensive bunch of tests in the file such that I can run the file to test my solution. The tests should have instructive errors for if and when they fail. (Put 50 lines of whitespace between the snippets at the top and the tests underneath, so that I don't accidentally see the tests when solving the snippets.)
 
 Additionally, for each step in the sequence, generate an answer key file (suffixed `-answers.md`). This file should contain, for each snippet: the expected output, and a brief rationale explaining _why_ that's the output — what concepts, gotchas, or subtleties the snippet is testing. This allows evaluation of the learner's answers in a future conversation without needing to re-derive the answers from the code. The answer key is not for the learner to look at; it is for the evaluator.
 
@@ -126,7 +126,16 @@ Here's the output of `tree` at the very beginning:
 
 In `resources`, `javascript-info-toc.md` contains the table of contents; the other two contain summaries that mention what each chapter, section, and subsection etc cover, and to what depth, but do not summarise the material itself. Refer to these when you need to to know what I'm referring to when I reference some part of javascript.info.
 
-`exercises` is where you put the snippets and stubs you generate.
+Naming convention: when I use a reference such as a.b.c.d:
+
+1. a refers to the part (Part 1, 2, or 3)
+2. b refers to the chapter
+3. c refers to the section
+4. d refers to the subsection
+
+and so on.
+
+`exercises` is where you put the snippets and stubs along with answer keys you generate.
 
 Each part of javascript.info has one folder in `exercises` dedicated to it:
 1. `jslang` for Part 1: The JavaScript Language
@@ -139,21 +148,21 @@ There are four levels of folder hierarchy:
 3. The section
 4. The subsection/concept/construct/pattern
 
-Place the files, two per step of the ascending sequence of complexity of snippets and stubs as described above (one snippets and one stubs), within the fourth/innermost level.
+Place the files, two per step of the ascending sequence of complexity of snippets and stubs as described above (one snippets and one stubs, with answer key), within the fourth/innermost level.
 
 If the requisite folders don't exist, create them.
 
 When naming, name the chapter, section, and subsection/concept/construct/pattern folders descriptively, with the name corresponding to the name of the chapter/section/subsection/concept/etc. Prefix each with its number so that an `ls` shows them in order.
 
-When naming the snippets and stuvs files themselves, also name those descriptively, with the name corresponding to the step in the sequence. Prefix these numerically with their step number as well, so an `ls` shows the sequence in the order I should do it. Suffix their names with `-snippets` or `-stubs` (before the file extension) correspondingly.
+When naming the snippets and stubs files themselves, also name those descriptively, with the name corresponding to the step in the sequence. Prefix these numerically with their step number as well, so an `ls` shows the sequence in the order I should do it. Suffix their names with `-snippets` or `-stubs` (before the file extension) correspondingly.
 
 ## Material
 
 The **primary resource** is javascript.info.
 
-I have uploaded the detailed table of contents in Markdown format, along with two chapter and section wise summaries of the whole structured as a study map, to the project files, and also put them in the repo. Use these when you want to know what some (sub)section I'm referencing contains.
+I have uploaded the detailed table of contents in Markdown format, along with two chapter- and section-wise summaries of the whole structured as a study map, to the project files, and also put them in the repo. Use these when you want to know what some (sub)section I'm referencing contains.
 
-Feel free to look up javascript.info itself if the provided summaries etc aren't enough to let you determine 
+Feel free to look up javascript.info itself if the provided summaries etc aren't enough to let you determine roughly the content of what I'm referring to.
 
 ## Further instructions
 
