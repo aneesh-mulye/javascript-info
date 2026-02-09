@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 2 Snippets: Live vs Static Collections</title>
+</head>
+<body>
+
+  <!-- ============ SNIPPET 1 ============ -->
+  <!--
+    The critical distinction: getElementsByClassName returns a LIVE
+    HTMLCollection that updates when the DOM changes. querySelectorAll
+    returns a STATIC NodeList snapshot. Think carefully about the order
+    of operations.
+  -->
+
+  <div id="snippet1">
+    <p class="note">Alpha</p>
+    <p class="note">Beta</p>
+  </div>
+
+  <script>
+    // --- Snippet 1 ---
+    const container = document.getElementById("snippet1");
+
+    const liveNotes = container.getElementsByClassName("note");
+    const staticNotes = container.querySelectorAll(".note");
+
+    console.log(liveNotes.length);
+    console.log(staticNotes.length);
+
+    // Now add a new element with class "note"
+    const newP = document.createElement("p");
+    newP.className = "note";
+    newP.textContent = "Gamma";
+    container.appendChild(newP);
+
+    console.log(liveNotes.length);
+    console.log(staticNotes.length);
+
+    // Remove the first .note element
+    container.removeChild(container.querySelector(".note"));
+
+    console.log(liveNotes.length);
+    console.log(staticNotes.length);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+
+  <!-- ============ SNIPPET 2 ============ -->
+  <!--
+    More live vs static behavior, plus iteration patterns.
+    getElementsByTagName also returns a live collection.
+  -->
+
+  <ul id="snippet2">
+    <li>One</li>
+    <li>Two</li>
+    <li>Three</li>
+  </ul>
+
+  <script>
+    // --- Snippet 2 ---
+    const list = document.getElementById("snippet2");
+
+    const liveLis = list.getElementsByTagName("li");
+    const staticLis = list.querySelectorAll("li");
+
+    // Convert to arrays using different techniques (Part 1 integration)
+    const liveArr = Array.from(liveLis);
+    const staticArr = [...staticLis];
+
+    console.log(liveArr.length);
+    console.log(staticArr.length);
+
+    // Add two more items
+    list.insertAdjacentHTML("beforeend", "<li>Four</li><li>Five</li>");
+
+    // The arrays were snapshots at the time of conversion
+    console.log(liveArr.length);
+    console.log(staticArr.length);
+
+    // But the live collection itself updated
+    console.log(liveLis.length);
+    // And the static NodeList did not
+    console.log(staticLis.length);
+
+    // Using the live collection's values now
+    console.log(liveLis[3].textContent);
+    // The static NodeList at index 3
+    console.log(staticLis[3]);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+</body>
+</html>

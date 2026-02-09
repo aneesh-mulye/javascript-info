@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 1 Snippets: getElementById and querySelector Basics</title>
+</head>
+<body>
+
+  <!-- ============ SNIPPET 1 ============ -->
+  <!--
+    getElementById and querySelector basics.
+    Think about what each returns and when null appears.
+  -->
+
+  <div id="box">
+    <p class="intro">Hello</p>
+    <p class="intro">World</p>
+    <span id="highlight">Important</span>
+  </div>
+
+  <script>
+    // --- Snippet 1 ---
+    const box = document.getElementById("box");
+    console.log(box.tagName);
+
+    const firstIntro = document.querySelector(".intro");
+    console.log(firstIntro.textContent);
+
+    const allIntros = document.querySelectorAll(".intro");
+    console.log(allIntros.length);
+
+    const missing = document.getElementById("nonexistent");
+    console.log(missing);
+
+    const missingQ = document.querySelector("#nonexistent");
+    console.log(missingQ);
+
+    // querySelector with a compound selector
+    const spanInBox = document.querySelector("#box span");
+    console.log(spanInBox.textContent);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+
+  <!-- ============ SNIPPET 2 ============ -->
+  <!--
+    querySelector uses CSS selectors. Trace which element each selects.
+    Remember: querySelector returns the FIRST match in document order.
+  -->
+
+  <ul id="menu">
+    <li class="item active">Dashboard</li>
+    <li class="item">Settings</li>
+    <li class="item">
+      <a href="/logout">Logout</a>
+    </li>
+  </ul>
+
+  <div class="item">Not in the menu</div>
+
+  <script>
+    // --- Snippet 2 ---
+
+    // Descendant selector: .item inside #menu
+    const menuItem = document.querySelector("#menu .item");
+    console.log(menuItem.textContent.trim());
+
+    // Attribute selector
+    const link = document.querySelector("a[href='/logout']");
+    console.log(link.textContent);
+
+    // :first-child pseudo-selector
+    const firstLi = document.querySelector("#menu li:first-child");
+    console.log(firstLi.className);
+
+    // querySelector called on an element (not document) — scopes search
+    const menu = document.getElementById("menu");
+    const itemInMenu = menu.querySelector(".item");
+    console.log(itemInMenu.textContent.trim());
+
+    // But what about this — does querySelector("#menu .item") starting
+    // from menu find anything?
+    const scoped = menu.querySelector("#menu .item");
+    console.log(scoped === null ? "null" : scoped.textContent.trim());
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+</body>
+</html>

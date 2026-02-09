@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 2 Stubs: Live vs Static Collections</title>
+</head>
+<body>
+
+  <div id="workspace">
+    <span class="tag">html</span>
+    <span class="tag">css</span>
+    <span class="tag">js</span>
+  </div>
+
+  <script>
+    // === STUB 1 ===
+    // Write a function `removeAllByClass(container, className)` that removes
+    // ALL elements with the given className from the container.
+    //
+    // IMPORTANT CONSTRAINT: You must use getElementsByClassName to get the
+    // collection, and then remove elements from it. Be careful — the collection
+    // is LIVE. If you iterate with a normal for loop (i = 0; i < length; i++)
+    // and remove elements, the collection shrinks and indices shift, so you'll
+    // skip elements. Find a correct approach.
+    //
+    // Return the number of elements removed.
+
+    function removeAllByClass(container, className) {
+      // YOUR CODE HERE
+    }
+
+
+    // === STUB 2 ===
+    // Write a function `snapshotAndCompare(container, selector)` that:
+    // 1. Gets elements matching `selector` using querySelectorAll (static)
+    // 2. Gets elements matching `selector` using getElementsByClassName
+    //    (assume selector is a single class name like ".tag", extract the
+    //    class name from it by removing the leading ".")
+    // 3. Returns a function (closure!) that, when called later, returns an
+    //    object: { staticCount: n, liveCount: n, changed: bool }
+    //    where staticCount is the current length of the static NodeList,
+    //    liveCount is the current length of the live collection, and
+    //    changed is true if they differ.
+    //
+    // This exercises closures (Part 1) capturing references to both types
+    // of collections.
+
+    function snapshotAndCompare(container, selector) {
+      // YOUR CODE HERE
+    }
+
+
+    // === TESTS ===
+
+    // Tests for Stub 1
+    // Create a fresh test container
+    const testDiv1 = document.createElement("div");
+    testDiv1.innerHTML = `
+      <p class="remove-me">A</p>
+      <p class="keep">B</p>
+      <p class="remove-me">C</p>
+      <p class="remove-me">D</p>
+      <p class="keep">E</p>
+    `;
+    document.body.appendChild(testDiv1);
+
+    const removedCount = removeAllByClass(testDiv1, "remove-me");
+    console.assert(
+      removedCount === 3,
+      `Stub 1 FAIL: expected 3 elements removed, got ${removedCount}. ` +
+      `If you got 2, you likely have the classic live-collection iteration bug: ` +
+      `when you remove element at index 0, the next element shifts to index 0, ` +
+      `but your loop moves to index 1, skipping it.`
+    );
+    console.assert(
+      testDiv1.getElementsByClassName("remove-me").length === 0,
+      `Stub 1 FAIL: expected 0 elements with class "remove-me" remaining, ` +
+      `got ${testDiv1.getElementsByClassName("remove-me").length}.`
+    );
+    console.assert(
+      testDiv1.children.length === 2,
+      `Stub 1 FAIL: expected 2 children remaining (the "keep" elements), ` +
+      `got ${testDiv1.children.length}.`
+    );
+
+    // Edge case: nothing to remove
+    const removedNone = removeAllByClass(testDiv1, "nonexistent");
+    console.assert(
+      removedNone === 0,
+      `Stub 1 FAIL: expected 0 removed for nonexistent class, got ${removedNone}.`
+    );
+
+    document.body.removeChild(testDiv1);
+
+    // Tests for Stub 2
+    const workspace = document.getElementById("workspace");
+    const compare = snapshotAndCompare(workspace, ".tag");
+
+    // Before any changes
+    let result = compare();
+    console.assert(
+      result.staticCount === 3 && result.liveCount === 3 && result.changed === false,
+      `Stub 2 FAIL: before DOM changes, expected {staticCount: 3, liveCount: 3, changed: false}, ` +
+      `got ${JSON.stringify(result)}. Both collections should start with 3 items.`
+    );
+
+    // Add a new .tag element
+    const newTag = document.createElement("span");
+    newTag.className = "tag";
+    newTag.textContent = "react";
+    workspace.appendChild(newTag);
+
+    result = compare();
+    console.assert(
+      result.staticCount === 3,
+      `Stub 2 FAIL: after adding element, staticCount should still be 3 (snapshot), ` +
+      `got ${result.staticCount}. querySelectorAll returns a static NodeList.`
+    );
+    console.assert(
+      result.liveCount === 4,
+      `Stub 2 FAIL: after adding element, liveCount should be 4 (live collection updated), ` +
+      `got ${result.liveCount}.`
+    );
+    console.assert(
+      result.changed === true,
+      `Stub 2 FAIL: after adding element, changed should be true, got ${result.changed}. ` +
+      `The counts now differ.`
+    );
+
+    // Remove all .tag elements for cleanup, then check again
+    while (workspace.querySelector(".tag")) {
+      workspace.removeChild(workspace.querySelector(".tag"));
+    }
+
+    result = compare();
+    console.assert(
+      result.staticCount === 3,
+      `Stub 2 FAIL: after removing all tags, staticCount should still be 3, ` +
+      `got ${result.staticCount}. The static NodeList never changes.`
+    );
+    console.assert(
+      result.liveCount === 0,
+      `Stub 2 FAIL: after removing all tags, liveCount should be 0, ` +
+      `got ${result.liveCount}. The live collection reflects current DOM state.`
+    );
+
+    console.log("All tests passed!");
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Node Properties - Step 2 Snippets</title>
+</head>
+<body>
+
+  <!-- Snippet 1: outerHTML assignment gotcha -->
+  <div id="wrapper">
+    <p id="target">Original paragraph</p>
+  </div>
+
+  <!-- Snippet 2: innerHTML vs textContent for setting, innerHTML += -->
+  <div id="setting-test">
+    <span id="html-set">placeholder</span>
+    <span id="text-set">placeholder</span>
+  </div>
+  <div id="append-test">
+    <p id="appended">Start</p>
+  </div>
+
+  <script>
+    // ============================================================
+    // SNIPPET 1: The outerHTML assignment gotcha
+    // ============================================================
+    // Pay very careful attention to what happens to the variable
+    // versus what happens in the DOM.
+
+    const target = document.getElementById('target');
+    console.log("Before:", target.outerHTML);
+
+    target.outerHTML = '<h3 id="replacement">I replaced the paragraph</h3>';
+
+    // What is target now? What's in the DOM?
+    console.log("target.outerHTML:", target.outerHTML);
+    console.log("target.tagName:", target.tagName);
+    console.log("target.textContent:", target.textContent);
+
+    // And what does the DOM actually contain?
+    const wrapper = document.getElementById('wrapper');
+    console.log("wrapper.innerHTML:", wrapper.innerHTML.trim());
+
+    // Can we find the old element?
+    console.log("getElementById('target'):", document.getElementById('target'));
+    // Can we find the new one?
+    const replacement = document.getElementById('replacement');
+    console.log("replacement.tagName:", replacement.tagName);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+
+    // ============================================================
+    // SNIPPET 2: innerHTML vs textContent setting, innerHTML +=
+    // ============================================================
+
+    // Part A: innerHTML vs textContent for setting
+    const htmlSet = document.getElementById('html-set');
+    const textSet = document.getElementById('text-set');
+
+    const userInput = '<img src=x onerror="alert(\'XSS\')">';
+
+    htmlSet.innerHTML = userInput;
+    textSet.textContent = userInput;
+
+    console.log("htmlSet.childNodes.length:", htmlSet.childNodes.length);
+    console.log("htmlSet.firstChild.tagName:", htmlSet.firstChild?.tagName);
+
+    console.log("textSet.childNodes.length:", textSet.childNodes.length);
+    console.log("textSet.firstChild.nodeType:", textSet.firstChild?.nodeType);
+    console.log("textSet.innerHTML:", textSet.innerHTML);
+
+    console.log("---");
+
+    // Part B: innerHTML += and its consequences
+    const appended = document.getElementById('appended');
+
+    // Store a reference to the existing text node
+    const originalTextNode = appended.firstChild;
+    console.log("originalTextNode.data:", originalTextNode.data);
+
+    appended.innerHTML += ' - Middle';
+    appended.innerHTML += ' - End';
+
+    console.log("appended.textContent:", appended.textContent);
+
+    // Is the original text node still in the document?
+    console.log("originalTextNode.data:", originalTextNode.data);
+    console.log("originalTextNode === appended.firstChild:", originalTextNode === appended.firstChild);
+    console.log("originalTextNode.parentNode:", originalTextNode.parentNode);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+  </script>
+</body>
+</html>

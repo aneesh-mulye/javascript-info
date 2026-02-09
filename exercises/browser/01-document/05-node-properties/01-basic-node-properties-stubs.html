@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Node Properties - Step 1 Stubs</title>
+</head>
+<body>
+
+  <div id="test-area">
+    <h2>Title</h2>
+    <!-- navigation marker -->
+    <p>Some <strong>bold</strong> and <em>italic</em> text</p>
+    Plain text node
+  </div>
+
+  <div id="mixed-content">
+    <span class="tag">JavaScript</span> &amp; <span class="tag">HTML</span> are <b>great</b>
+  </div>
+
+  <script>
+    // ============================================================
+    // STUB 1: classifyChildNodes
+    // ============================================================
+    // Write a function classifyChildNodes(elem) that takes a DOM element
+    // and returns an object with three arrays:
+    //   { elements: [...], textNodes: [...], comments: [...] }
+    //
+    // - elements: array of objects { tagName: <string>, index: <number> }
+    //   where tagName is the element's tag name (uppercase) and index is
+    //   the child node's position among all childNodes (0-based).
+    // - textNodes: array of objects { content: <string>, index: <number> }
+    //   where content is the text node's textContent (trimmed), and index
+    //   is its position. Only include text nodes whose trimmed content
+    //   is non-empty.
+    // - comments: array of objects { content: <string>, index: <number> }
+    //   where content is the comment's textContent (trimmed).
+    //
+    // Use nodeType to classify nodes.
+
+    function classifyChildNodes(elem) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // STUB 2: getContentSummary
+    // ============================================================
+    // Write a function getContentSummary(elem) that returns an object:
+    //   { htmlLength: <number>, textLength: <number>, hasNestedTags: <boolean> }
+    //
+    // - htmlLength: the length of elem.innerHTML
+    // - textLength: the length of elem.textContent
+    // - hasNestedTags: true if innerHTML and textContent differ (meaning
+    //   there are HTML tags inside the element), false otherwise.
+    //
+    // Note: do NOT trim anything. Use the raw lengths.
+
+    function getContentSummary(elem) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // TESTS
+    // ============================================================
+
+    // --- Tests for classifyChildNodes ---
+    const testArea = document.getElementById('test-area');
+    const result1 = classifyChildNodes(testArea);
+
+    console.assert(
+      Array.isArray(result1.elements),
+      "classifyChildNodes should return an object with an 'elements' array"
+    );
+    console.assert(
+      Array.isArray(result1.textNodes),
+      "classifyChildNodes should return an object with a 'textNodes' array"
+    );
+    console.assert(
+      Array.isArray(result1.comments),
+      "classifyChildNodes should return an object with a 'comments' array"
+    );
+
+    // test-area has child nodes: \n, <h2>, \n, <!--comment-->, \n, <p>, \n, "Plain text node", \n
+    console.assert(
+      result1.elements.length === 2,
+      `Expected 2 element children (h2, p), got ${result1.elements.length}. ` +
+      `Remember: only direct children, and use nodeType === 1 for elements.`
+    );
+    console.assert(
+      result1.elements[0].tagName === 'H2',
+      `Expected first element tagName to be 'H2', got '${result1.elements[0]?.tagName}'. ` +
+      `tagName is always uppercase in HTML documents.`
+    );
+    console.assert(
+      result1.elements[1].tagName === 'P',
+      `Expected second element tagName to be 'P', got '${result1.elements[1]?.tagName}'.`
+    );
+
+    console.assert(
+      result1.comments.length === 1,
+      `Expected 1 comment node, got ${result1.comments.length}. ` +
+      `Comments have nodeType === 8.`
+    );
+    console.assert(
+      result1.comments[0].content === 'navigation marker',
+      `Expected comment content 'navigation marker', got '${result1.comments[0]?.content}'. ` +
+      `Make sure to trim the content.`
+    );
+
+    console.assert(
+      result1.textNodes.length === 1,
+      `Expected 1 non-empty text node ('Plain text node'), got ${result1.textNodes.length}. ` +
+      `Whitespace-only text nodes should be excluded (trim and check).`
+    );
+    console.assert(
+      result1.textNodes[0].content === 'Plain text node',
+      `Expected text content 'Plain text node', got '${result1.textNodes[0]?.content}'.`
+    );
+
+    // Check that indices are correct
+    console.assert(
+      typeof result1.elements[0].index === 'number',
+      "Each entry should have a numeric 'index' property indicating its position in childNodes."
+    );
+
+    // --- Tests for getContentSummary ---
+    const mixedContent = document.getElementById('mixed-content');
+    const result2 = getContentSummary(mixedContent);
+
+    console.assert(
+      typeof result2.htmlLength === 'number',
+      "getContentSummary should return an object with numeric 'htmlLength'"
+    );
+    console.assert(
+      typeof result2.textLength === 'number',
+      "getContentSummary should return an object with numeric 'textLength'"
+    );
+    console.assert(
+      typeof result2.hasNestedTags === 'boolean',
+      "getContentSummary should return an object with boolean 'hasNestedTags'"
+    );
+
+    console.assert(
+      result2.htmlLength > result2.textLength,
+      `For an element with nested tags, htmlLength (${result2.htmlLength}) should be > textLength (${result2.textLength}). ` +
+      `innerHTML includes HTML tags; textContent strips them.`
+    );
+    console.assert(
+      result2.hasNestedTags === true,
+      `mixed-content has nested <span> and <b> tags, so hasNestedTags should be true. ` +
+      `Compare innerHTML length vs textContent length, or check if they differ.`
+    );
+
+    // Test with a plain-text-only element
+    const plainSpan = document.createElement('span');
+    plainSpan.textContent = 'just text';
+    const result3 = getContentSummary(plainSpan);
+
+    console.assert(
+      result3.hasNestedTags === false,
+      `For an element with only text and no child tags, hasNestedTags should be false. ` +
+      `innerHTML and textContent should be equal for such elements.`
+    );
+    console.assert(
+      result3.htmlLength === result3.textLength,
+      `For a plain-text element, htmlLength (${result3.htmlLength}) should equal textLength (${result3.textLength}).`
+    );
+
+    console.log("All tests passed!");
+  </script>
+</body>
+</html>

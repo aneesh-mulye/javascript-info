@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Step 1 Snippets: Basic Script Execution</title>
+</head>
+
+<body>
+
+	<!-- ============ SNIPPET 1 ============ -->
+	<!--
+    Multiple <script> tags execute in document order, top to bottom.
+    Each script block runs to completion before the next begins.
+    Think about what order the console.log statements execute in.
+  -->
+
+	<script>
+		// --- Snippet 1 ---
+		console.log("A");
+	</script>
+
+	<p id="middle">Hello</p>
+
+	<script>
+		console.log("B");
+		console.log(document.getElementById("middle").textContent);
+		console.log("C");
+	</script>
+
+	<script>
+		console.log("D");
+	</script>
+
+	<!--
+    What is the full output, line by line?
+
+    // YOUR ANSWER:
+    // A
+    // B
+    // Hello
+    // C
+    // D
+  -->
+
+
+	<!-- ============ SNIPPET 2 ============ -->
+	<!--
+    A <script> tag with a `src` attribute loads and executes an
+    external file. If the tag ALSO has content between its opening
+    and closing tags, that content is IGNORED.
+
+    For this snippet, assume external-script.js does NOT exist
+    (it will fail to load). Think about what happens.
+  -->
+
+	<div id="before-external">Above</div>
+
+	<script>
+		// --- Snippet 2 ---
+		console.log("E: before external");
+	</script>
+
+	<script src="nonexistent-file.js">
+		// This content is between the tags of a script with src.
+		console.log("F: inside src script");
+	</script>
+
+	<script>
+		console.log("G: after external");
+		console.log(document.getElementById("before-external").textContent);
+	</script>
+
+	<!--
+    What is the full output from Snippet 2?
+    Does "F: inside src script" ever execute?
+    Does the failed load of nonexistent-file.js prevent "G" from running?
+
+    // YOUR ANSWER:
+    // E: before external
+    // G: after external
+    //
+  -->
+
+</body>
+
+</html>

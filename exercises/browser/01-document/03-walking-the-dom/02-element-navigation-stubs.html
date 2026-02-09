@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 2 Stubs: Element-Only Navigation</title>
+</head>
+<body>
+
+  <div id="wrapper">
+    <!-- header comment -->
+    <header>
+      <h1>Title</h1>
+    </header>
+    <main>
+      <p>Paragraph 1</p>
+      <p>Paragraph 2</p>
+      <p>Paragraph 3</p>
+    </main>
+    <footer>
+      <small>Copyright</small>
+    </footer>
+  </div>
+
+  <script>
+    // === STUB 1 ===
+    // Write a function `collectElementTexts(parentElement)` that returns an
+    // array of the textContent of each DIRECT element child of parentElement.
+    // Use element-only navigation (children or firstElementChild/nextElementSibling).
+    // Do NOT use childNodes. Do NOT use querySelectorAll or any search method.
+    // Use Array.from() or spreading to convert to a real array if you want to
+    // use array methods.
+
+    function collectElementTexts(parentElement) {
+      // YOUR CODE HERE
+    }
+
+
+    // === STUB 2 ===
+    // Write a function `nthElementChild(parentElement, n)` that returns the
+    // nth element child (0-indexed) of parentElement using element-only
+    // navigation (firstElementChild + nextElementSibling), NOT the children
+    // collection or any index-based access.
+    // Return null if n is out of range.
+    // This exercises walking the element sibling chain step by step.
+
+    function nthElementChild(parentElement, n) {
+      // YOUR CODE HERE
+    }
+
+
+    // === TESTS ===
+
+    const wrapper = document.getElementById("wrapper");
+
+    // Tests for Stub 1
+    const wrapperTexts = collectElementTexts(wrapper);
+    console.assert(
+      Array.isArray(wrapperTexts),
+      `Stub 1 FAIL: expected an array, got ${typeof wrapperTexts}.`
+    );
+    console.assert(
+      wrapperTexts.length === 3,
+      `Stub 1 FAIL: expected 3 element children of #wrapper (header, main, footer), ` +
+      `got ${wrapperTexts.length}. The comment node should not be counted — ` +
+      `element-only navigation skips comments and text nodes.`
+    );
+    console.assert(
+      wrapperTexts[0].trim() === "Title",
+      `Stub 1 FAIL: expected first element child text to include "Title", got "${wrapperTexts[0]}".`
+    );
+    console.assert(
+      wrapperTexts[1].includes("Paragraph 1"),
+      `Stub 1 FAIL: expected second element child text to include "Paragraph 1", got "${wrapperTexts[1]}".`
+    );
+
+    const mainEl = wrapper.children[1]; // <main>
+    const mainTexts = collectElementTexts(mainEl);
+    console.assert(
+      mainTexts.length === 3,
+      `Stub 1 FAIL: expected 3 <p> children of <main>, got ${mainTexts.length}.`
+    );
+    console.assert(
+      mainTexts[2] === "Paragraph 3",
+      `Stub 1 FAIL: expected third <p> text to be "Paragraph 3", got "${mainTexts[2]}".`
+    );
+
+    // Tests for Stub 2
+    const child0 = nthElementChild(wrapper, 0);
+    console.assert(
+      child0 !== null && child0.tagName === "HEADER",
+      `Stub 2 FAIL: expected 0th element child of #wrapper to be HEADER, ` +
+      `got ${child0 ? child0.tagName : "null"}. ` +
+      `Start from firstElementChild and walk with nextElementSibling.`
+    );
+
+    const child2 = nthElementChild(wrapper, 2);
+    console.assert(
+      child2 !== null && child2.tagName === "FOOTER",
+      `Stub 2 FAIL: expected 2nd element child of #wrapper to be FOOTER, ` +
+      `got ${child2 ? child2.tagName : "null"}.`
+    );
+
+    const childOutOfRange = nthElementChild(wrapper, 5);
+    console.assert(
+      childOutOfRange === null,
+      `Stub 2 FAIL: expected null for index 5 (out of range), got "${childOutOfRange}". ` +
+      `Return null when you've exhausted all siblings before reaching n.`
+    );
+
+    const childNeg = nthElementChild(wrapper, -1);
+    console.assert(
+      childNeg === null,
+      `Stub 2 FAIL: expected null for negative index, got "${childNeg}".`
+    );
+
+    const mainChild1 = nthElementChild(mainEl, 1);
+    console.assert(
+      mainChild1 !== null && mainChild1.textContent === "Paragraph 2",
+      `Stub 2 FAIL: expected 1st element child of <main> to be "Paragraph 2", ` +
+      `got "${mainChild1 ? mainChild1.textContent : "null"}".`
+    );
+
+    console.log("All tests passed!");
+  </script>
+
+</body>
+</html>

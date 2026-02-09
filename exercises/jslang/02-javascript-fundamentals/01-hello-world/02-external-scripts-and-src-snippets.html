@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 2 Snippets: External Scripts and the src Gotcha</title>
+</head>
+<body>
+
+  <!-- ============ SNIPPET 1 ============ -->
+  <!--
+    External scripts load and execute in order. Functions and
+    variables defined in earlier scripts are available to later ones.
+    The critical gotcha: if a <script> tag has a `src` attribute,
+    any content between the opening and closing tags is IGNORED.
+  -->
+
+  <script src="external-greet.js"></script>
+
+  <script>
+    // --- Snippet 1 ---
+    // external-greet.js defines a function greet(name).
+    // It was loaded by the <script src="..."> above.
+    console.log(typeof greet);
+    console.log(greet("World"));
+  </script>
+
+  <!-- Now the gotcha: src + inline content -->
+  <script src="external-hello.js">
+    // This code is INSIDE a <script> tag that has a src attribute.
+    console.log("This line is between the tags of a src script");
+    window.__inlineRan = true;
+  </script>
+
+  <script>
+    console.log("__externalHelloLoaded:", window.__externalHelloLoaded);
+    console.log("__inlineRan:", window.__inlineRan);
+  </script>
+
+  <!--
+    What is the full output?
+    Does "This line is between the tags" ever print?
+    Does __inlineRan get set?
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+  -->
+
+
+  <!-- ============ SNIPPET 2 ============ -->
+  <!--
+    The `type` and `language` attributes on <script> tags.
+    - `language` is deprecated and ignored by modern browsers.
+    - `type` defaults to "text/javascript"; setting it explicitly
+      is unnecessary but harmless. Setting it to something else
+      (like "text/plain") prevents execution.
+  -->
+
+  <script type="text/javascript">
+    // --- Snippet 2 ---
+    console.log("type=text/javascript ran");
+  </script>
+
+  <script language="JavaScript">
+    console.log("language=JavaScript ran");
+  </script>
+
+  <script type="text/plain">
+    console.log("type=text/plain ran");
+  </script>
+
+  <script>
+    // Can we read the non-executing script's content?
+    const plainScripts = document.querySelectorAll('script[type="text/plain"]');
+    console.log("text/plain scripts found:", plainScripts.length);
+    console.log("content accessible:", plainScripts[0].textContent.includes("text/plain ran"));
+  </script>
+
+  <!--
+    Which of the three console.log statements inside the typed/languaged
+    scripts actually execute?
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+  -->
+
+</body>
+</html>

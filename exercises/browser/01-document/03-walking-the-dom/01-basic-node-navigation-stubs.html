@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 1 Stubs: Basic Node Navigation</title>
+</head>
+<body>
+
+  <div id="container">
+    <p>Hello</p>
+    <p>World</p>
+    <p>Goodbye</p>
+  </div>
+
+  <ul id="nav-list">
+    <li>Home</li>
+    <li>About</li>
+    <li>Contact</li>
+  </ul>
+
+  <script>
+    // === STUB 1 ===
+    // Write a function `countNodeTypes(parentElement)` that takes a DOM element
+    // and returns an object { elements: n, textNodes: n, commentNodes: n }
+    // counting the DIRECT child nodes by type.
+    // Use childNodes and nodeType (1 = Element, 3 = Text, 8 = Comment).
+    // Do NOT count recursively — only direct children.
+
+    function countNodeTypes(parentElement) {
+      // YOUR CODE HERE
+    }
+
+
+    // === STUB 2 ===
+    // Write a function `getTextOfLastElementChild(parentElement)` that takes a
+    // DOM element and uses ONLY basic node navigation (childNodes, lastChild,
+    // previousSibling, nodeType) — NOT element-only navigation — to find the
+    // last child that is an element node, and return its textContent.
+    // Return null if there are no element children.
+    // Hint: start from lastChild and walk backwards with previousSibling.
+
+    function getTextOfLastElementChild(parentElement) {
+      // YOUR CODE HERE
+    }
+
+
+    // === TESTS ===
+
+    // Tests for Stub 1
+    const containerCounts = countNodeTypes(document.getElementById("container"));
+    console.assert(
+      containerCounts.elements === 3,
+      `Stub 1 FAIL: expected 3 element children in #container, got ${containerCounts.elements}. ` +
+      `Remember: only count nodeType === 1.`
+    );
+    console.assert(
+      containerCounts.textNodes === 4,
+      `Stub 1 FAIL: expected 4 text nodes in #container (whitespace between tags), got ${containerCounts.textNodes}. ` +
+      `Whitespace (newlines, spaces) between element tags creates text nodes.`
+    );
+    console.assert(
+      containerCounts.commentNodes === 0,
+      `Stub 1 FAIL: expected 0 comment nodes in #container, got ${containerCounts.commentNodes}.`
+    );
+
+    const navCounts = countNodeTypes(document.getElementById("nav-list"));
+    console.assert(
+      navCounts.elements === 3,
+      `Stub 1 FAIL: expected 3 element children in #nav-list, got ${navCounts.elements}.`
+    );
+    console.assert(
+      navCounts.textNodes === 4,
+      `Stub 1 FAIL: expected 4 text nodes in #nav-list, got ${navCounts.textNodes}. ` +
+      `There is whitespace before the first <li>, between each <li>, and after the last <li>.`
+    );
+
+    // Edge case: element with no whitespace between children
+    const tightDiv = document.createElement("div");
+    tightDiv.innerHTML = "<b>A</b><i>B</i>";
+    const tightCounts = countNodeTypes(tightDiv);
+    console.assert(
+      tightCounts.elements === 2 && tightCounts.textNodes === 0,
+      `Stub 1 FAIL: for innerHTML "<b>A</b><i>B</i>", expected 2 elements and 0 text nodes, ` +
+      `got ${tightCounts.elements} elements and ${tightCounts.textNodes} text nodes.`
+    );
+
+    // Tests for Stub 2
+    const containerLastText = getTextOfLastElementChild(document.getElementById("container"));
+    console.assert(
+      containerLastText === "Goodbye",
+      `Stub 2 FAIL: expected "Goodbye" for #container's last element child, got "${containerLastText}". ` +
+      `The lastChild of #container is a text node (whitespace). You need to walk backwards past it.`
+    );
+
+    const navLastText = getTextOfLastElementChild(document.getElementById("nav-list"));
+    console.assert(
+      navLastText === "Contact",
+      `Stub 2 FAIL: expected "Contact" for #nav-list's last element child, got "${navLastText}".`
+    );
+
+    // Edge case: element with only text nodes
+    const textOnly = document.createElement("div");
+    textOnly.appendChild(document.createTextNode("just text"));
+    const textOnlyResult = getTextOfLastElementChild(textOnly);
+    console.assert(
+      textOnlyResult === null,
+      `Stub 2 FAIL: expected null when parent has no element children, got "${textOnlyResult}". ` +
+      `Make sure to return null if no element node is found.`
+    );
+
+    console.log("All tests passed!");
+  </script>
+
+</body>
+</html>

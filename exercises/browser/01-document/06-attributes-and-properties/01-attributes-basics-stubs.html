@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attributes and Properties - Step 1 Stubs</title>
+</head>
+<body>
+
+  <div id="test-elem"
+       class="box"
+       title="Test Element"
+       data-info="metadata"
+       custom-x="nonstandard"
+       tabindex="-1">
+    Test content
+  </div>
+
+  <script>
+    // ============================================================
+    // STUB 1: classifyAttributes
+    // ============================================================
+    // Write a function classifyAttributes(elem) that examines every
+    // attribute on elem and classifies it as 'standard' or 'nonstandard'.
+    //
+    // An attribute is 'standard' if the element has a corresponding
+    // DOM property. Check this by testing whether the property name
+    // exists on the element (using `in` operator on the element).
+    //
+    // Attribute-to-property name mapping rules:
+    // - 'class' attribute maps to 'className' property
+    // - 'for' attribute maps to 'htmlFor' property
+    // - attributes containing hyphens don't directly map to properties
+    //   (except data-* which maps to dataset, but treat data-* as
+    //   'nonstandard' for this exercise since the direct property
+    //   like elem['data-info'] doesn't exist)
+    // - Other attributes map to the same-named property
+    //
+    // Return:
+    //   {
+    //     standard: [{ name: attrName, value: attrValue, propertyName: propName }, ...],
+    //     nonstandard: [{ name: attrName, value: attrValue }, ...]
+    //   }
+    //
+    // Where propertyName is the DOM property name (e.g., 'className' for 'class').
+    // Sort each array by attribute name alphabetically.
+
+    function classifyAttributes(elem) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // STUB 2: syncAttributes
+    // ============================================================
+    // Write a function syncAttributes(sourceElem, targetElem) that
+    // copies ALL attributes from sourceElem to targetElem using
+    // getAttribute and setAttribute.
+    //
+    // Return an object:
+    //   {
+    //     copied: number of attributes copied,
+    //     attrNames: array of attribute names that were copied (sorted)
+    //   }
+    //
+    // Important: use the attributes collection to iterate, and
+    // getAttribute/setAttribute for the actual copying.
+
+    function syncAttributes(sourceElem, targetElem) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // TESTS
+    // ============================================================
+
+    // --- Tests for classifyAttributes ---
+    const testElem = document.getElementById('test-elem');
+    const classified = classifyAttributes(testElem);
+
+    console.assert(
+      Array.isArray(classified.standard) && Array.isArray(classified.nonstandard),
+      "classifyAttributes must return { standard: [...], nonstandard: [...] }"
+    );
+
+    const stdNames = classified.standard.map(a => a.name);
+    const nonstdNames = classified.nonstandard.map(a => a.name);
+
+    console.assert(
+      stdNames.includes('id'),
+      `'id' is a standard HTML attribute and should be classified as standard, ` +
+      `but it was found in: ${stdNames.includes('id') ? 'standard' : 'nonstandard or missing'}.`
+    );
+    console.assert(
+      stdNames.includes('class'),
+      `'class' is a standard attribute (maps to className property). ` +
+      `It should be in the standard list.`
+    );
+    console.assert(
+      stdNames.includes('title'),
+      `'title' is a standard attribute. Should be classified as standard.`
+    );
+    console.assert(
+      stdNames.includes('tabindex'),
+      `'tabindex' is a standard attribute (maps to tabIndex property). ` +
+      `Should be in the standard list.`
+    );
+
+    console.assert(
+      nonstdNames.includes('data-info'),
+      `'data-info' should be classified as nonstandard. ` +
+      `While data-* attrs are accessible via dataset, ` +
+      `elem['data-info'] is not a DOM property.`
+    );
+    console.assert(
+      nonstdNames.includes('custom-x'),
+      `'custom-x' is a non-standard attribute and should be classified as nonstandard.`
+    );
+
+    // Check propertyName mapping
+    const classEntry = classified.standard.find(a => a.name === 'class');
+    console.assert(
+      classEntry && classEntry.propertyName === 'className',
+      `The 'class' attribute should have propertyName 'className', ` +
+      `got '${classEntry?.propertyName}'. The 'class' attr maps to the 'className' DOM property.`
+    );
+
+    const idEntry = classified.standard.find(a => a.name === 'id');
+    console.assert(
+      idEntry && idEntry.propertyName === 'id',
+      `The 'id' attribute should have propertyName 'id', got '${idEntry?.propertyName}'.`
+    );
+
+    // Check sorting
+    for (let i = 1; i < classified.standard.length; i++) {
+      console.assert(
+        classified.standard[i - 1].name <= classified.standard[i].name,
+        `Standard attributes should be sorted alphabetically. ` +
+        `'${classified.standard[i - 1].name}' should come before '${classified.standard[i].name}'.`
+      );
+    }
+
+    // --- Tests for syncAttributes ---
+    const source = document.createElement('div');
+    source.setAttribute('id', 'source');
+    source.setAttribute('class', 'panel active');
+    source.setAttribute('data-level', '5');
+    source.setAttribute('custom-thing', 'value');
+
+    const target = document.createElement('span');
+    const syncResult = syncAttributes(source, target);
+
+    console.assert(
+      syncResult.copied === 4,
+      `Expected 4 attributes copied, got ${syncResult.copied}.`
+    );
+
+    console.assert(
+      target.getAttribute('id') === 'source',
+      `Target should have id='source' after sync, got '${target.getAttribute('id')}'. ` +
+      `Use setAttribute to copy attribute values.`
+    );
+    console.assert(
+      target.getAttribute('class') === 'panel active',
+      `Target should have class='panel active' after sync, got '${target.getAttribute('class')}'.`
+    );
+    console.assert(
+      target.getAttribute('data-level') === '5',
+      `Target should have data-level='5' after sync.`
+    );
+    console.assert(
+      target.getAttribute('custom-thing') === 'value',
+      `Target should have custom-thing='value' after sync. ` +
+      `Non-standard attributes can be copied with setAttribute too.`
+    );
+
+    console.assert(
+      JSON.stringify(syncResult.attrNames) === JSON.stringify(['class', 'custom-thing', 'data-level', 'id']),
+      `attrNames should be sorted alphabetically: ['class', 'custom-thing', 'data-level', 'id'], ` +
+      `got ${JSON.stringify(syncResult.attrNames)}.`
+    );
+
+    // Test with element that has boolean attributes
+    const source2 = document.createElement('input');
+    source2.setAttribute('type', 'checkbox');
+    source2.setAttribute('checked', '');
+    source2.setAttribute('disabled', '');
+    const target2 = document.createElement('input');
+    const syncResult2 = syncAttributes(source2, target2);
+
+    console.assert(
+      target2.getAttribute('checked') === '',
+      `Boolean attributes like 'checked' have empty string as value. ` +
+      `Target should have checked='', got '${target2.getAttribute('checked')}'.`
+    );
+    console.assert(
+      syncResult2.copied === 3,
+      `Expected 3 attributes copied (type, checked, disabled), got ${syncResult2.copied}.`
+    );
+
+    console.log("All tests passed!");
+  </script>
+</body>
+</html>

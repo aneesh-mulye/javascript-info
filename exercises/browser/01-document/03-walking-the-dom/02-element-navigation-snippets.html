@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 2 Snippets: Element-Only Navigation</title>
+</head>
+<body>
+
+  <!-- ============ SNIPPET 1 ============ -->
+  <!--
+    Compare childNodes vs children, firstChild vs firstElementChild, etc.
+    Think carefully about what each property skips.
+  -->
+
+  <div id="snippet1">
+    <!-- greeting -->
+    <span class="a">One</span>
+    <span class="b">Two</span>
+  </div>
+
+  <script>
+    // --- Snippet 1 ---
+    const s1 = document.getElementById("snippet1");
+
+    console.log(s1.childNodes.length);
+    console.log(s1.children.length);
+    console.log(s1.firstChild === s1.firstElementChild);
+    console.log(s1.firstElementChild.className);
+    console.log(s1.lastElementChild.textContent);
+    console.log(s1.firstElementChild.nextSibling.nodeType);
+    console.log(s1.firstElementChild.nextElementSibling.textContent);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+
+  <!-- ============ SNIPPET 2 ============ -->
+  <!--
+    This one mixes element-only and all-node navigation.
+    Track the path carefully.
+  -->
+
+  <ul id="snippet2">
+    <li>Apple</li>
+    <li>Banana</li>
+    <li>Cherry</li>
+  </ul>
+
+  <script>
+    // --- Snippet 2 ---
+    const s2 = document.getElementById("snippet2");
+
+    const items = s2.children;
+    const allNodes = s2.childNodes;
+
+    console.log(items.length);
+    console.log(allNodes.length);
+    console.log(items[1].textContent);
+    console.log(allNodes[1] === items[0]);
+    console.log(items[0].nextElementSibling === items[1]);
+    console.log(items[0].nextSibling === items[1]);
+    console.log(items[2].previousElementSibling.textContent);
+    console.log(s2.children instanceof HTMLCollection);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+</body>
+</html>

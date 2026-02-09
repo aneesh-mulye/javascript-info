@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attributes and Properties - Step 3 Snippets</title>
+</head>
+<body>
+
+  <!-- Snippet 1: data-* attributes and dataset -->
+  <div id="user-card"
+       data-user-id="42"
+       data-role="editor"
+       data-last-login-date="2025-01-15"
+       data-is-active="true">
+    <span data-tooltip-text="Click to view profile">John Doe</span>
+  </div>
+
+  <!-- Snippet 2: Complex attribute manipulation -->
+  <ul id="config-list">
+    <li data-priority="high" data-category="bug">Fix login crash</li>
+    <li data-priority="low" data-category="feature">Add dark mode</li>
+    <li data-priority="high" data-category="feature" data-blocked-by="auth-team">SSO integration</li>
+    <li data-priority="medium" data-category="bug">Fix typo in footer</li>
+  </ul>
+
+  <script>
+    // ============================================================
+    // SNIPPET 1: data-* attributes and the dataset property
+    // ============================================================
+
+    const card = document.getElementById('user-card');
+
+    // Accessing data attributes via dataset
+    console.log("dataset.userId:", card.dataset.userId);
+    console.log("dataset.role:", card.dataset.role);
+    console.log("dataset.lastLoginDate:", card.dataset.lastLoginDate);
+    console.log("dataset.isActive:", card.dataset.isActive);
+    console.log("typeof dataset.isActive:", typeof card.dataset.isActive);
+
+    console.log("---");
+
+    // dataset keys vs getAttribute names
+    console.log("getAttribute('data-user-id'):", card.getAttribute('data-user-id'));
+    console.log("getAttribute('data-last-login-date'):", card.getAttribute('data-last-login-date'));
+
+    // What are all the dataset keys?
+    console.log("dataset keys:", Object.keys(card.dataset));
+
+    console.log("---");
+
+    // Setting via dataset
+    card.dataset.theme = 'dark';
+    console.log("After dataset.theme = 'dark':");
+    console.log("  dataset.theme:", card.dataset.theme);
+    console.log("  getAttribute('data-theme'):", card.getAttribute('data-theme'));
+    console.log("  hasAttribute('data-theme'):", card.hasAttribute('data-theme'));
+
+    // Setting a multi-word data attribute via dataset
+    card.dataset.signUpSource = 'organic';
+    console.log("dataset.signUpSource:", card.dataset.signUpSource);
+    console.log("getAttribute('data-sign-up-source'):", card.getAttribute('data-sign-up-source'));
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+
+    // ============================================================
+    // SNIPPET 2: Complex attribute manipulation with array methods
+    // ============================================================
+
+    const items = Array.from(document.querySelectorAll('#config-list li'));
+
+    // Use filter + map to get high priority items
+    const highPriority = items
+      .filter(li => li.dataset.priority === 'high')
+      .map(li => ({
+        text: li.textContent,
+        category: li.dataset.category,
+        blocked: li.hasAttribute('data-blocked-by')
+      }));
+
+    console.log("High priority:", JSON.stringify(highPriority));
+
+    console.log("---");
+
+    // Use reduce to group by category
+    const byCategory = items.reduce((acc, li) => {
+      const cat = li.dataset.category;
+      if (!acc[cat]) acc[cat] = [];
+      acc[cat].push(li.textContent);
+      return acc;
+    }, {});
+
+    console.log("By category:", JSON.stringify(byCategory));
+
+    // Check: does removing a data attribute via removeAttribute
+    // also remove it from dataset?
+    const firstItem = items[0];
+    console.log("Before remove - dataset.priority:", firstItem.dataset.priority);
+    firstItem.removeAttribute('data-priority');
+    console.log("After remove - dataset.priority:", firstItem.dataset.priority);
+    console.log("After remove - 'priority' in dataset:", 'priority' in firstItem.dataset);
+
+    // And via delete on dataset?
+    console.log("Before delete - dataset.category:", firstItem.dataset.category);
+    delete firstItem.dataset.category;
+    console.log("After delete - getAttribute('data-category'):", firstItem.getAttribute('data-category'));
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+  </script>
+</body>
+</html>

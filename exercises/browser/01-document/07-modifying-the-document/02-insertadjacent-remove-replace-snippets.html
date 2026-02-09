@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head><title>Step 2 Snippets: insertAdjacentHTML, remove, replaceWith</title></head>
+<body>
+
+<div id="wrapper1">
+  <p id="anchor1">Anchor paragraph</p>
+</div>
+
+<hr>
+
+<div id="wrapper2">
+  <ul id="list2">
+    <li id="li-alpha">Alpha</li>
+    <li id="li-beta">Beta</li>
+    <li id="li-gamma">Gamma</li>
+  </ul>
+</div>
+
+<script>
+  // ============================================================
+  // SNIPPET 1
+  // insertAdjacentHTML with all four positions on one element.
+  // Note: insertAdjacentHTML PARSES HTML, unlike append which
+  // treats strings as text nodes.
+  // ============================================================
+
+  const wrapper1 = document.getElementById('wrapper1');
+  const anchor1 = document.getElementById('anchor1');
+
+  // "beforebegin" — before the element itself (as a sibling)
+  anchor1.insertAdjacentHTML('beforebegin', '<span>BB</span>');
+
+  // "afterbegin" — inside the element, at the start (first child)
+  anchor1.insertAdjacentHTML('afterbegin', '<b>AB-</b>');
+
+  // "beforeend" — inside the element, at the end (last child)
+  anchor1.insertAdjacentHTML('beforeend', '<i>-BE</i>');
+
+  // "afterend" — after the element itself (as a sibling)
+  anchor1.insertAdjacentHTML('afterend', '<span>AE</span>');
+
+  // What are wrapper1's element children now?
+  const w1kids = Array.from(wrapper1.children).map(el => {
+    return `${el.tagName}:${el.textContent}`;
+  });
+  console.log(w1kids.join(' | '));
+
+  // And what's inside anchor1 itself?
+  console.log(anchor1.innerHTML);
+
+  // YOUR ANSWER:
+
+
+  // ============================================================
+  // SNIPPET 2
+  // Contrast insertAdjacentHTML (parses) vs append (text node).
+  // remove() and replaceWith().
+  // ============================================================
+
+  const wrapper2 = document.getElementById('wrapper2');
+  const list2 = document.getElementById('list2');
+  const liBeta = document.getElementById('li-beta');
+  const liGamma = document.getElementById('li-gamma');
+
+  // insertAdjacentHTML parses the HTML — creates a real <li> element
+  liBeta.insertAdjacentHTML('afterend', '<li id="li-parsed">Parsed <b>item</b></li>');
+
+  // append with a string — does NOT parse, creates a text node
+  list2.append('<li>Not a real item</li>');
+
+  // How many <li> elements in the list?
+  console.log(list2.querySelectorAll('li').length);
+
+  // What's the last childNode of list2? (element or text?)
+  const lastChild = list2.lastChild;
+  console.log(lastChild.nodeType === 3 ? 'text node' : 'element');
+  console.log(lastChild.textContent.trim());
+
+  // Now remove Beta
+  liBeta.remove();
+
+  // Replace Gamma with a new element
+  const liOmega = document.createElement('li');
+  liOmega.textContent = 'Omega';
+  liGamma.replaceWith(liOmega);
+
+  // Final <li> list
+  const finalItems = Array.from(list2.querySelectorAll('li'))
+    .map(li => li.textContent);
+  console.log(finalItems.join(', '));
+
+  // YOUR ANSWER:
+
+
+</script>
+</body>
+</html>

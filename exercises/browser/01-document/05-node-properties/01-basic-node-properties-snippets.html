@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Node Properties - Step 1 Snippets</title>
+</head>
+<body>
+
+  <!-- Snippet 1: nodeType, nodeName, tagName -->
+  <div id="container">
+    <p id="greeting">Hello, <strong>world</strong></p>
+    <!-- a helpful comment -->
+  </div>
+
+  <!-- Snippet 2: innerHTML vs textContent reading -->
+  <ul id="fruits">
+    <li>Apple &amp; <em>Orange</em></li>
+    <li>Banana</li>
+  </ul>
+
+  <script>
+    // ============================================================
+    // SNIPPET 1: nodeType, nodeName, tagName
+    // ============================================================
+    // Examine various node types and their names.
+
+    const container = document.getElementById('container');
+    const nodes = container.childNodes;
+
+    const results = Array.from(nodes).map(node => {
+      return {
+        nodeType: node.nodeType,
+        nodeName: node.nodeName,
+        tagName: node.tagName
+      };
+    });
+
+    results.forEach((r, i) => {
+      console.log(`Node ${i}: type=${r.nodeType}, nodeName="${r.nodeName}", tagName=${r.tagName}`);
+    });
+
+    console.log("---");
+
+    // Now check the <p> element itself
+    const p = document.getElementById('greeting');
+    console.log(p.nodeName);
+    console.log(p.tagName);
+    console.log(p.firstChild.nodeName);
+    console.log(p.firstChild.tagName);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+
+    // ============================================================
+    // SNIPPET 2: innerHTML vs textContent reading
+    // ============================================================
+    // Compare what innerHTML and textContent return for the same element.
+
+    const fruits = document.getElementById('fruits');
+    const firstLi = fruits.querySelector('li');
+
+    console.log("innerHTML:", firstLi.innerHTML);
+    console.log("textContent:", firstLi.textContent);
+
+    console.log("---");
+
+    // Now read from the whole <ul>
+    console.log("ul textContent:", JSON.stringify(fruits.textContent));
+
+    // And check: does textContent decode HTML entities?
+    console.log("includes ampersand:", firstLi.textContent.includes('&'));
+    console.log("includes &amp;:", firstLi.textContent.includes('&amp;'));
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+  </script>
+</body>
+</html>

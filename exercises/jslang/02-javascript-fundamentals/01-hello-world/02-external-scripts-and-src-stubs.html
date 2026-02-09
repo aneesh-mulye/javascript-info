@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 2 Stubs: External Scripts and the src Gotcha</title>
+</head>
+<body>
+
+  <!-- Load the external script that defines greet() -->
+  <script src="external-greet.js"></script>
+
+  <div id="greeting-target"></div>
+  <div id="multi-script-target"></div>
+
+  <script>
+    // ============================================================
+    // STUB 1
+    //
+    // The external script "external-greet.js" has already been loaded
+    // above. It defines a function greet(name) that returns
+    // "Hello, <name>!".
+    //
+    // 1. Call greet("JavaScript") and store the result.
+    // 2. Set the textContent of #greeting-target to that result.
+    // 3. Log the result to the console.
+    //
+    // This exercises: using a function from an external script,
+    // and understanding that <script src="..."> makes its definitions
+    // available to subsequent inline scripts.
+    // ============================================================
+
+    // YOUR CODE HERE
+
+
+    // --- TESTS FOR STUB 1 ---
+    (function testStub1() {
+      const el = document.getElementById("greeting-target");
+      console.assert(
+        el.textContent === "Hello, JavaScript!",
+        `STUB 1 FAIL: expected textContent "Hello, JavaScript!", got "${el.textContent}". ` +
+        `Call greet("JavaScript") and set it as textContent.`
+      );
+      console.assert(
+        typeof greet === "function",
+        `STUB 1 FAIL: greet should be a function from the external script. ` +
+        `Is external-greet.js loading? Check the src path.`
+      );
+      console.log("STUB 1: passed");
+    })();
+  </script>
+
+  <script>
+    // ============================================================
+    // STUB 2
+    //
+    // Demonstrate your understanding of script execution order
+    // and the src gotcha by completing this task:
+    //
+    // 1. Create TWO new <script> elements using document.createElement.
+    //
+    // 2. For the first script element:
+    //    - Set its textContent to: window.__scriptOneRan = true;
+    //    - Append it to document.body
+    //    (This shows you can dynamically add and execute scripts.)
+    //
+    // 3. For the second script element:
+    //    - Set its src to "external-hello.js"
+    //    - ALSO set its textContent to: window.__shouldNotRun = true;
+    //    - Append it to document.body
+    //    (This demonstrates the src gotcha with dynamically created
+    //     scripts too: the inline content is ignored when src is set.)
+    //
+    // 4. Set #multi-script-target's textContent to "Scripts added"
+    //
+    // Note: dynamically added scripts with src load asynchronously
+    // by default, so __externalHelloLoaded may not be set yet when
+    // the tests run. The tests only check __scriptOneRan and
+    // __shouldNotRun (which is synchronous vs ignored).
+    // ============================================================
+
+    // YOUR CODE HERE
+
+
+    // --- TESTS FOR STUB 2 ---
+    (function testStub2() {
+      const el = document.getElementById("multi-script-target");
+      console.assert(
+        el.textContent === "Scripts added",
+        `STUB 2 FAIL: expected textContent "Scripts added", got "${el.textContent}".`
+      );
+
+      // The first script (inline textContent, no src) should have run synchronously
+      console.assert(
+        window.__scriptOneRan === true,
+        `STUB 2 FAIL: __scriptOneRan should be true. ` +
+        `A dynamically created <script> with textContent (no src) ` +
+        `executes when appended to the document.`
+      );
+
+      // The second script has src, so its textContent is IGNORED
+      console.assert(
+        window.__shouldNotRun === undefined,
+        `STUB 2 FAIL: __shouldNotRun should be undefined, got ${window.__shouldNotRun}. ` +
+        `When a <script> tag has a src attribute, any inline content ` +
+        `between the tags is IGNORED and never executed.`
+      );
+
+      // Verify two script elements were actually added
+      const addedScripts = document.querySelectorAll("body > script");
+      const lastTwo = Array.from(addedScripts).slice(-2);
+      console.assert(
+        lastTwo.length >= 2,
+        `STUB 2 FAIL: expected at least 2 script elements added to body.`
+      );
+
+      console.log("STUB 2: passed");
+    })();
+  </script>
+
+</body>
+</html>

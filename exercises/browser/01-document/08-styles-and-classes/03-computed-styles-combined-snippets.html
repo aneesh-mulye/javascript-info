@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Step 3 Snippets: getComputedStyle and combining styles with classes</title>
+<style>
+  #elem1 {
+    width: 300px;
+    padding: 20px;
+    font-size: 18px;
+    color: darkblue;
+    background-color: lightyellow;
+    margin: 15px;
+  }
+  .override-color { color: crimson; }
+  .override-bg { background-color: lavender; }
+
+  #elem2 {
+    width: 50%;
+    font-size: 2em;
+    border: 3px solid green;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  #elem2::before {
+    content: "PREFIX: ";
+    color: gray;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div id="elem1">Element 1</div>
+
+<div id="parent" style="width: 400px; font-size: 16px;">
+  <div id="elem2">Element 2</div>
+</div>
+
+<script>
+  // ============================================================
+  // SNIPPET 1
+  // getComputedStyle reads the ACTUAL applied styles (from CSS
+  // classes, stylesheets, AND inline). style property only reads
+  // INLINE styles. getComputedStyle returns resolved values (px).
+  // ============================================================
+
+  const elem1 = document.getElementById('elem1');
+
+  // style reads only inline — elem1 has no inline styles
+  console.log(elem1.style.color);
+  console.log(elem1.style.fontSize);
+  console.log(elem1.style.width);
+
+  // getComputedStyle reads the actual applied values
+  const comp1 = getComputedStyle(elem1);
+  console.log(comp1.color);
+  console.log(comp1.fontSize);
+  console.log(comp1.width);
+
+  // Now add a class that overrides color
+  elem1.classList.add('override-color');
+  const comp1b = getComputedStyle(elem1);
+  console.log(comp1b.color);
+
+  // Set an inline style — it takes precedence over class
+  elem1.style.color = 'green';
+  const comp1c = getComputedStyle(elem1);
+  console.log(comp1c.color);
+
+  // Remove the inline style — falls back to class style
+  elem1.style.color = '';
+  const comp1d = getComputedStyle(elem1);
+  // The 'override-color' class is still applied, so color is crimson
+  // (not the original darkblue from #elem1 CSS)
+  console.log(comp1d.color);
+
+  // YOUR ANSWER:
+
+
+  // ============================================================
+  // SNIPPET 2
+  // getComputedStyle returns RESOLVED values: relative units
+  // (%, em) are converted to px. Can read pseudo-element styles.
+  // getComputedStyle is read-only.
+  // ============================================================
+
+  const elem2 = document.getElementById('elem2');
+
+  // elem2 has width: 50% and font-size: 2em in CSS
+  // parent has width: 400px and font-size: 16px
+  const comp2 = getComputedStyle(elem2);
+
+  // 50% of 400px parent = 200px... but box-sizing: border-box
+  // includes padding and border in width, so content width changes.
+  // However, getComputedStyle.width reports the content-box width
+  // in most browsers, but with border-box it may report the full width.
+  // The resolved value should be in px regardless.
+  console.log(comp2.width);
+
+  // 2em with parent font-size 16px = 32px
+  console.log(comp2.fontSize);
+
+  // Can read pseudo-element styles with second argument
+  const pseudoStyle = getComputedStyle(elem2, '::before');
+  console.log(pseudoStyle.fontWeight);
+  console.log(pseudoStyle.color);
+
+  // getComputedStyle is read-only — this does nothing (no error, just ignored)
+  try {
+    comp2.fontSize = '10px';
+  } catch(e) {
+    // In most browsers, setting on computed style either throws or is silently ignored
+  }
+  // fontSize unchanged
+  console.log(getComputedStyle(elem2).fontSize);
+
+  // YOUR ANSWER:
+
+
+</script>
+</body>
+</html>

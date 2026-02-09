@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 3 Stubs: matches, closest, and Combined Searching</title>
+</head>
+<body>
+
+  <div id="todo-app">
+    <ul class="todo-list" data-filter="all">
+      <li class="todo-item done" data-priority="low">
+        <span class="todo-text">Buy groceries</span>
+        <button class="btn-delete">X</button>
+      </li>
+      <li class="todo-item" data-priority="high">
+        <span class="todo-text">Finish report</span>
+        <button class="btn-delete">X</button>
+      </li>
+      <li class="todo-item done" data-priority="high">
+        <span class="todo-text">Call dentist</span>
+        <button class="btn-delete">X</button>
+      </li>
+      <li class="todo-item" data-priority="low">
+        <span class="todo-text">Read book</span>
+        <button class="btn-delete">X</button>
+      </li>
+      <li class="todo-item done" data-priority="medium">
+        <span class="todo-text">Clean house</span>
+        <button class="btn-delete">X</button>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    // === STUB 1 ===
+    // Write a function `filterTodos(container, filterObj)` that:
+    // - Finds all .todo-item elements within `container` using querySelectorAll
+    // - Filters them based on filterObj which can have these optional properties:
+    //   - done: boolean — if true, only items matching ".done"; if false, only
+    //     items NOT matching ".done". Use element.matches() to test.
+    //   - priority: string — if present, only items whose data-priority attribute
+    //     matches this value
+    // - Returns an array of the textContent of the .todo-text span within each
+    //   matching item (use querySelector scoped to the item)
+    //
+    // Uses: querySelectorAll, matches(), querySelector, array methods (Part 1)
+
+    function filterTodos(container, filterObj) {
+      // YOUR CODE HERE
+    }
+
+
+    // === STUB 2 ===
+    // Write a function `handleDeleteClick(clickedElement)` that simulates
+    // event delegation for the delete buttons:
+    // - Given an element that was "clicked", use closest() to determine if
+    //   the click was on or inside a .btn-delete
+    // - If it was, use closest() again to find the parent .todo-item
+    // - If found, remove that .todo-item from its parent and return the
+    //   textContent of the .todo-text span that was in the removed item
+    // - If the clickedElement is NOT inside a .btn-delete, return null
+    //   (click was elsewhere, not on a delete button)
+    //
+    // This is the core pattern behind event delegation: you receive an
+    // element that was clicked, and use closest() to figure out what
+    // logical component was interacted with.
+
+    function handleDeleteClick(clickedElement) {
+      // YOUR CODE HERE
+    }
+
+
+    // === TESTS ===
+
+    const todoApp = document.getElementById("todo-app");
+
+    // Tests for Stub 1
+    const allItems = filterTodos(todoApp, {});
+    console.assert(
+      allItems.length === 5,
+      `Stub 1 FAIL: with no filters, expected 5 items, got ${allItems.length}. ` +
+      `An empty filterObj should match all .todo-item elements.`
+    );
+
+    const doneItems = filterTodos(todoApp, { done: true });
+    console.assert(
+      doneItems.length === 3,
+      `Stub 1 FAIL: expected 3 done items, got ${doneItems.length}. ` +
+      `Use element.matches(".done") to check if an item is done.`
+    );
+    console.assert(
+      doneItems.includes("Buy groceries") && doneItems.includes("Call dentist") && doneItems.includes("Clean house"),
+      `Stub 1 FAIL: done items should be "Buy groceries", "Call dentist", "Clean house", ` +
+      `got ${JSON.stringify(doneItems)}.`
+    );
+
+    const notDoneItems = filterTodos(todoApp, { done: false });
+    console.assert(
+      notDoneItems.length === 2,
+      `Stub 1 FAIL: expected 2 not-done items, got ${notDoneItems.length}. ` +
+      `When done is false, include items that do NOT match ".done".`
+    );
+
+    const highPriority = filterTodos(todoApp, { priority: "high" });
+    console.assert(
+      highPriority.length === 2,
+      `Stub 1 FAIL: expected 2 high-priority items, got ${highPriority.length}. ` +
+      `Check data-priority attribute.`
+    );
+
+    const doneAndHigh = filterTodos(todoApp, { done: true, priority: "high" });
+    console.assert(
+      doneAndHigh.length === 1 && doneAndHigh[0] === "Call dentist",
+      `Stub 1 FAIL: expected 1 item (Call dentist) for done+high, got ${JSON.stringify(doneAndHigh)}. ` +
+      `Both filters should apply simultaneously (AND logic).`
+    );
+
+    const noMatch = filterTodos(todoApp, { done: false, priority: "medium" });
+    console.assert(
+      noMatch.length === 0,
+      `Stub 1 FAIL: expected 0 items for not-done + medium priority, got ${noMatch.length}.`
+    );
+
+    // Tests for Stub 2
+    // Simulate clicking a delete button directly
+    const firstDeleteBtn = todoApp.querySelector(".btn-delete");
+    const firstItemText = todoApp.querySelector(".todo-item .todo-text").textContent;
+    const deletedText = handleDeleteClick(firstDeleteBtn);
+    console.assert(
+      deletedText === firstItemText,
+      `Stub 2 FAIL: expected "${firstItemText}" returned after delete, got "${deletedText}". ` +
+      `Use closest(".btn-delete") to verify click target, then closest(".todo-item") to find the item.`
+    );
+
+    const remainingAfterDelete = todoApp.querySelectorAll(".todo-item").length;
+    console.assert(
+      remainingAfterDelete === 4,
+      `Stub 2 FAIL: expected 4 items remaining after deleting one, got ${remainingAfterDelete}. ` +
+      `Remove the .todo-item from its parentNode.`
+    );
+
+    // Simulate clicking the span text inside a todo-item (not a delete button)
+    const someText = todoApp.querySelector(".todo-text");
+    const notDeleted = handleDeleteClick(someText);
+    console.assert(
+      notDeleted === null,
+      `Stub 2 FAIL: clicking on .todo-text (not .btn-delete) should return null, ` +
+      `got "${notDeleted}". Use closest(".btn-delete") — if null, the click wasn't on a delete button.`
+    );
+
+    // Items should be unchanged
+    const unchangedCount = todoApp.querySelectorAll(".todo-item").length;
+    console.assert(
+      unchangedCount === 4,
+      `Stub 2 FAIL: clicking non-delete element should not remove anything, ` +
+      `but item count changed to ${unchangedCount}.`
+    );
+
+    // Simulate clicking something completely outside the todo list
+    const outsideResult = handleDeleteClick(document.body);
+    console.assert(
+      outsideResult === null,
+      `Stub 2 FAIL: clicking on body should return null, got "${outsideResult}".`
+    );
+
+    console.log("All tests passed!");
+  </script>
+
+</body>
+</html>

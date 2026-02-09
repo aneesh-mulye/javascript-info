@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 1 Snippets: Basic Node Navigation</title>
+</head>
+<body>
+
+  <!-- ============ SNIPPET 1 ============ -->
+  <!--
+    Study the DOM structure below carefully.
+    Remember: whitespace between tags creates text nodes.
+    What does each console.log output?
+  -->
+
+  <div id="snippet1"><span>Alpha</span><span>Beta</span></div>
+
+  <script>
+    // --- Snippet 1 ---
+    const s1 = document.getElementById("snippet1");
+
+    console.log(s1.childNodes.length);
+    console.log(s1.firstChild.tagName);
+    console.log(s1.lastChild.textContent);
+    console.log(s1.firstChild.nextSibling.textContent);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+  </script>
+
+
+  <!-- ============ SNIPPET 2 ============ -->
+  <!--
+    Now look at this structure. Note the whitespace carefully.
+    There is a newline + spaces between the <div> tag and its children,
+    and between each child.
+  -->
+
+  <div id="snippet2">
+    <p>First</p>
+    <!-- a comment -->
+    <p>Second</p>
+  </div>
+
+  <script>
+    // --- Snippet 2 ---
+    const s2 = document.getElementById("snippet2");
+
+    console.log(s2.childNodes.length);
+    console.log(s2.firstChild.nodeType);
+    console.log(s2.childNodes[2].nodeType);
+    console.log(s2.childNodes[3].nodeType);
+    console.log(s2.lastChild.nodeType);
+    console.log(s2.childNodes[1].nextSibling.nextSibling.nodeType);
+    console.log(s2.childNodes[3].parentNode === s2);
+
+    // Hint: nodeType 1 = Element, 3 = Text, 8 = Comment
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head><title>Step 3 Snippets: cloneNode and DocumentFragment</title></head>
+<body>
+
+<div id="original">
+  <p id="inner-p">Hello <strong>world</strong></p>
+</div>
+
+<div id="target1"></div>
+
+<hr>
+
+<ul id="base-list">
+  <li>Item X</li>
+  <li>Item Y</li>
+</ul>
+
+<div id="target2"></div>
+
+<script>
+  // ============================================================
+  // SNIPPET 1
+  // cloneNode(true) vs cloneNode(false): deep vs shallow clone.
+  // Clones are independent — modifying one doesn't affect the other.
+  // cloneNode does NOT copy id uniqueness warnings (but ids are cloned).
+  // ============================================================
+
+  const original = document.getElementById('original');
+  const target1 = document.getElementById('target1');
+
+  // Deep clone: copies the element AND all descendants
+  const deepClone = original.cloneNode(true);
+  deepClone.id = 'deep-clone';
+
+  // Shallow clone: copies ONLY the element itself, no children
+  const shallowClone = original.cloneNode(false);
+  shallowClone.id = 'shallow-clone';
+
+  target1.append(deepClone, shallowClone);
+
+  // What does the deep clone contain?
+  console.log(deepClone.children.length);
+  console.log(deepClone.querySelector('strong') !== null);
+  console.log(deepClone.textContent.trim());
+
+  // What does the shallow clone contain?
+  console.log(shallowClone.children.length);
+  console.log(shallowClone.textContent);
+
+  // Modify the deep clone's <p> — does original change?
+  deepClone.querySelector('p').textContent = 'Modified!';
+  console.log(original.querySelector('p').textContent.trim());
+
+  // YOUR ANSWER:
+
+
+  // ============================================================
+  // SNIPPET 2
+  // DocumentFragment: acts as a temporary container that
+  // "dissolves" on insertion — only its children are inserted.
+  // ============================================================
+
+  const baseList = document.getElementById('base-list');
+  const target2 = document.getElementById('target2');
+
+  const fragment = document.createDocumentFragment();
+
+  // Build up items in the fragment
+  const names = ['Alpha', 'Beta', 'Gamma'];
+  names.forEach(name => {
+    const li = document.createElement('li');
+    li.textContent = name;
+    fragment.append(li);
+  });
+
+  // How many children does the fragment have before insertion?
+  console.log(fragment.childNodes.length);
+
+  // Clone the base list deeply, then append the fragment to the clone
+  const listClone = baseList.cloneNode(true);
+  listClone.id = 'cloned-list';
+  listClone.append(fragment);
+
+  // After insertion, the fragment is empty — its children moved
+  console.log(fragment.childNodes.length);
+
+  target2.append(listClone);
+
+  // What are all the <li> texts in the cloned list?
+  const allItems = Array.from(listClone.children).map(li => li.textContent);
+  console.log(allItems.join(', '));
+
+  // Did the original list change?
+  console.log(baseList.children.length);
+
+  // YOUR ANSWER:
+
+
+</script>
+</body>
+</html>

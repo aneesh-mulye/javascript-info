@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attributes and Properties - Step 2 Snippets</title>
+</head>
+<body>
+
+  <!-- Snippet 1: Attribute-property sync and the input.value gotcha -->
+  <input id="username" type="text" value="initial">
+  <input id="toggle" type="checkbox" checked>
+
+  <!-- Snippet 2: Type differences and href behavior -->
+  <a id="relative-link" href="/about">About</a>
+  <a id="full-link" href="https://example.com/page">Example</a>
+  <div id="styled" style="color: red; font-size: 14px;">Styled</div>
+
+  <script>
+    // ============================================================
+    // SNIPPET 1: Attribute-property sync, input.value one-way sync
+    // ============================================================
+
+    const username = document.getElementById('username');
+
+    // Initial state: attribute and property are in sync
+    console.log("property:", username.value);
+    console.log("attribute:", username.getAttribute('value'));
+
+    // Change the PROPERTY
+    username.value = 'changed-via-property';
+    console.log("After property change:");
+    console.log("  property:", username.value);
+    console.log("  attribute:", username.getAttribute('value'));
+
+    // Change the ATTRIBUTE
+    username.setAttribute('value', 'changed-via-attribute');
+    console.log("After attribute change:");
+    console.log("  property:", username.value);
+    console.log("  attribute:", username.getAttribute('value'));
+
+    console.log("---");
+
+    // Now test with a fresh input where we haven't touched the property
+    const freshInput = document.createElement('input');
+    freshInput.setAttribute('value', 'from-attr');
+    console.log("Fresh input property:", freshInput.value);
+    console.log("Fresh input attribute:", freshInput.getAttribute('value'));
+
+    // Set attribute again
+    freshInput.setAttribute('value', 'updated-attr');
+    console.log("After attr update - property:", freshInput.value);
+
+    // NOW touch the property
+    freshInput.value = 'from-property';
+    // Then try to update via attribute again
+    freshInput.setAttribute('value', 'attr-again');
+    console.log("After property was set then attr updated:");
+    console.log("  property:", freshInput.value);
+    console.log("  attribute:", freshInput.getAttribute('value'));
+
+    console.log("---");
+
+    // Checkbox: checked attribute vs property
+    const toggle = document.getElementById('toggle');
+    console.log("checked property:", toggle.checked);
+    console.log("typeof checked property:", typeof toggle.checked);
+    console.log("getAttribute('checked'):", toggle.getAttribute('checked'));
+    console.log("typeof getAttribute:", typeof toggle.getAttribute('checked'));
+
+    toggle.checked = false;
+    console.log("After unchecking - property:", toggle.checked);
+    console.log("After unchecking - attribute:", toggle.getAttribute('checked'));
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+
+    // ============================================================
+    // SNIPPET 2: Type differences, href, style
+    // ============================================================
+
+    const relLink = document.getElementById('relative-link');
+    const fullLink = document.getElementById('full-link');
+
+    // href: attribute stores what's in HTML, property gives full URL
+    console.log("relative getAttribute:", relLink.getAttribute('href'));
+    console.log("relative .href:", relLink.href);
+    console.log("same?", relLink.getAttribute('href') === relLink.href);
+
+    console.log("full getAttribute:", fullLink.getAttribute('href'));
+    console.log("full .href:", fullLink.href);
+    console.log("same?", fullLink.getAttribute('href') === fullLink.href);
+
+    console.log("---");
+
+    // style: attribute is a string, property is an object
+    const styled = document.getElementById('styled');
+    console.log("getAttribute('style'):", styled.getAttribute('style'));
+    console.log("typeof getAttribute('style'):", typeof styled.getAttribute('style'));
+    console.log(".style:", styled.style);
+    console.log("typeof .style:", typeof styled.style);
+    console.log(".style.color:", styled.style.color);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head><title>Step 2 Stubs: insertAdjacentHTML, remove, replaceWith</title></head>
+<body>
+
+<div id="sandbox1">
+  <div id="card">
+    <p id="card-body">Card body content</p>
+  </div>
+</div>
+
+<hr>
+
+<div id="sandbox2">
+  <table id="data-table">
+    <tbody id="tbody">
+      <tr id="row-1"><td>Row 1 Col A</td><td>Row 1 Col B</td></tr>
+      <tr id="row-2"><td>Row 2 Col A</td><td>Row 2 Col B</td></tr>
+      <tr id="row-3"><td>Row 3 Col A</td><td>Row 3 Col B</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // ============================================================
+  // STUB 1
+  //
+  // Given #card inside #sandbox1:
+  //
+  // 1. Use insertAdjacentHTML with "afterbegin" on #card to insert
+  //    an <h3> with text "Card Title" as its first child.
+  //
+  // 2. Use insertAdjacentHTML with "beforeend" on #card to insert
+  //    a <footer> element containing the text "Card Footer"
+  //    as its last child.
+  //
+  // 3. Use insertAdjacentHTML with "beforebegin" on #card to insert
+  //    a <p> with text "Above the card" as a sibling before #card.
+  //
+  // 4. Use insertAdjacentHTML with "afterend" on #card to insert
+  //    a <p> with text "Below the card" as a sibling after #card.
+  //
+  // Final children of #sandbox1 (elements only):
+  //   <p>Above the card</p>
+  //   <div id="card">
+  //     <h3>Card Title</h3>
+  //     <p id="card-body">Card body content</p>
+  //     <footer>Card Footer</footer>
+  //   </div>
+  //   <p>Below the card</p>
+  // ============================================================
+
+  const sandbox1 = document.getElementById('sandbox1');
+  const card = document.getElementById('card');
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 1 ---
+  (function testStub1() {
+    // Check sandbox1 element children
+    const s1children = sandbox1.children;
+    console.assert(s1children.length === 3,
+      `STUB 1: #sandbox1 should have 3 element children, got ${s1children.length}. Did you use beforebegin and afterend on #card?`);
+
+    console.assert(s1children[0].tagName === 'P' && s1children[0].textContent === 'Above the card',
+      `STUB 1: First child of #sandbox1 should be <p>Above the card</p>. Got <${s1children[0].tagName}>${s1children[0].textContent}`);
+
+    console.assert(s1children[1] === card,
+      `STUB 1: Second child of #sandbox1 should be the original #card element.`);
+
+    console.assert(s1children[2].tagName === 'P' && s1children[2].textContent === 'Below the card',
+      `STUB 1: Third child of #sandbox1 should be <p>Below the card</p>. Got <${s1children[2].tagName}>${s1children[2].textContent}`);
+
+    // Check card's element children
+    const cardChildren = card.children;
+    console.assert(cardChildren.length === 3,
+      `STUB 1: #card should have 3 element children, got ${cardChildren.length}. Did you use afterbegin and beforeend?`);
+
+    console.assert(cardChildren[0].tagName === 'H3' && cardChildren[0].textContent === 'Card Title',
+      `STUB 1: First child of #card should be <h3>Card Title</h3>. Got <${cardChildren[0].tagName}>${cardChildren[0].textContent}. ` +
+      `"afterbegin" inserts as the first child inside the element.`);
+
+    console.assert(cardChildren[1].tagName === 'P' && cardChildren[1].id === 'card-body',
+      `STUB 1: Second child of #card should be the original <p id="card-body">. Got <${cardChildren[1].tagName}> with id="${cardChildren[1].id}"`);
+
+    console.assert(cardChildren[2].tagName === 'FOOTER' && cardChildren[2].textContent === 'Card Footer',
+      `STUB 1: Third child of #card should be <footer>Card Footer</footer>. Got <${cardChildren[2].tagName}>${cardChildren[2].textContent}. ` +
+      `"beforeend" inserts as the last child inside the element.`);
+
+    console.log('STUB 1: All tests passed!');
+  })();
+
+
+  // ============================================================
+  // STUB 2
+  //
+  // Given the table with 3 rows (#row-1, #row-2, #row-3):
+  //
+  // 1. Remove #row-2 from the table using .remove().
+  //
+  // 2. Create a new <tr> with two <td> cells containing
+  //    "New Row Col A" and "New Row Col B" respectively.
+  //    Use replaceWith() to replace #row-3 with this new row.
+  //
+  // 3. Use insertAdjacentHTML on the <tbody> with "beforeend"
+  //    to add a final row: a <tr> containing two <td> cells
+  //    with "Final Col A" and "Final Col B".
+  //
+  // After all operations, the tbody should contain exactly 3 <tr>:
+  //   Row 1: "Row 1 Col A" | "Row 1 Col B"
+  //   Row 2: "New Row Col A" | "New Row Col B"
+  //   Row 3: "Final Col A" | "Final Col B"
+  // ============================================================
+
+  const tbody = document.getElementById('tbody');
+  const row2 = document.getElementById('row-2');
+  const row3 = document.getElementById('row-3');
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 2 ---
+  (function testStub2() {
+    const rows = tbody.querySelectorAll('tr');
+    console.assert(rows.length === 3,
+      `STUB 2: Expected 3 rows in tbody, got ${rows.length}.`);
+
+    // Row 1
+    const r1cells = rows[0].querySelectorAll('td');
+    console.assert(r1cells[0].textContent === 'Row 1 Col A' && r1cells[1].textContent === 'Row 1 Col B',
+      `STUB 2: First row should be "Row 1 Col A | Row 1 Col B". Got "${r1cells[0].textContent} | ${r1cells[1].textContent}"`);
+
+    // Row 2 (the replacement)
+    const r2cells = rows[1].querySelectorAll('td');
+    console.assert(r2cells.length === 2,
+      `STUB 2: Second row should have 2 <td> cells, got ${r2cells.length}.`);
+    console.assert(r2cells[0].textContent === 'New Row Col A' && r2cells[1].textContent === 'New Row Col B',
+      `STUB 2: Second row should be "New Row Col A | New Row Col B". Got "${r2cells[0].textContent} | ${r2cells[1].textContent}". ` +
+      `Did you use replaceWith() on row-3?`);
+
+    // Original row-2 and row-3 should not be in the document
+    console.assert(!document.getElementById('row-2'),
+      `STUB 2: #row-2 should have been removed from the DOM. Did you call .remove() on it?`);
+    console.assert(!document.getElementById('row-3'),
+      `STUB 2: #row-3 should have been replaced and no longer in the DOM.`);
+
+    // Row 3 (insertAdjacentHTML)
+    const r3cells = rows[2].querySelectorAll('td');
+    console.assert(r3cells.length === 2,
+      `STUB 2: Third row should have 2 <td> cells, got ${r3cells.length}.`);
+    console.assert(r3cells[0].textContent === 'Final Col A' && r3cells[1].textContent === 'Final Col B',
+      `STUB 2: Third row should be "Final Col A | Final Col B". Got "${r3cells[0].textContent} | ${r3cells[1].textContent}". ` +
+      `Did you use insertAdjacentHTML with "beforeend" on the tbody?`);
+
+    console.log('STUB 2: All tests passed!');
+  })();
+</script>
+</body>
+</html>

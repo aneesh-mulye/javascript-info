@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Node Properties - Step 3 Snippets</title>
+</head>
+<body>
+
+  <!-- Snippet 1: nodeValue/data for text and comment nodes -->
+  <div id="info-box">
+    <!-- config: theme=dark -->
+    Welcome to the <b>dashboard</b>
+    <!-- end config -->
+  </div>
+
+  <!-- Snippet 2: hidden property and combining properties -->
+  <ul id="task-list">
+    <li hidden>Secret task</li>
+    <li>Visible task 1</li>
+    <li>Visible task 2</li>
+    <li hidden>Another secret</li>
+  </ul>
+
+  <div id="toggle-demo">
+    <p id="message" hidden>Now you see me</p>
+  </div>
+
+  <script>
+    // ============================================================
+    // SNIPPET 1: nodeValue and data for text and comment nodes
+    // ============================================================
+
+    const infoBox = document.getElementById('info-box');
+    const children = Array.from(infoBox.childNodes);
+
+    // Filter to just comments and non-empty text nodes
+    const interesting = children.filter(n =>
+      n.nodeType === 8 || (n.nodeType === 3 && n.data.trim() !== '')
+    );
+
+    interesting.forEach((node, i) => {
+      console.log(`[${i}] nodeType=${node.nodeType}, data="${node.data.trim()}"`);
+      console.log(`    nodeValue === data: ${node.nodeValue === node.data}`);
+      console.log(`    nodeName: ${node.nodeName}`);
+    });
+
+    console.log("---");
+
+    // What about nodeValue/data on an element node?
+    const bold = infoBox.querySelector('b');
+    console.log("b.nodeValue:", bold.nodeValue);
+    console.log("b.data:", bold.data);
+    console.log("b.firstChild.data:", bold.firstChild.data);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+
+    // ============================================================
+    // SNIPPET 2: hidden property and combining properties
+    // ============================================================
+
+    const taskList = document.getElementById('task-list');
+    const allItems = Array.from(taskList.querySelectorAll('li'));
+
+    // Use reduce with destructuring to categorize
+    const { visible, hidden } = allItems.reduce((acc, li) => {
+      (li.hidden ? acc.hidden : acc.visible).push(li.textContent);
+      return acc;
+    }, { visible: [], hidden: [] });
+
+    console.log("Visible:", visible);
+    console.log("Hidden:", hidden);
+
+    console.log("---");
+
+    // Toggle hidden
+    const message = document.getElementById('message');
+    console.log("Before toggle - hidden:", message.hidden);
+    console.log("Before toggle - offsetHeight:", message.offsetHeight);
+
+    message.hidden = false;
+    console.log("After toggle - hidden:", message.hidden);
+    console.log("After toggle - has dimensions:", message.offsetHeight > 0);
+
+    // Now using the attribute approach
+    message.hidden = true;
+    console.log("Re-hidden via property:", message.hidden);
+    console.log("getAttribute('hidden'):", message.getAttribute('hidden'));
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+  </script>
+</body>
+</html>

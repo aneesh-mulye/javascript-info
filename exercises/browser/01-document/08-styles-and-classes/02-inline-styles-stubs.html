@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Step 2 Stubs: Inline styles, style property, cssText</title>
+<style>
+  .base-card {
+    width: 200px;
+    padding: 16px;
+    background-color: white;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div id="card1" class="base-card">Card One</div>
+<div id="card2" class="base-card" style="color: green; font-style: italic; letter-spacing: 2px;">Card Two</div>
+
+<script>
+  // ============================================================
+  // STUB 1
+  //
+  // Given #card1 (class="base-card", no inline styles):
+  //
+  // 1. Set the following inline styles using the style property
+  //    (use camelCase for multi-word properties):
+  //    - background-color: "lightyellow"
+  //    - border-radius: "12px"
+  //    - font-size: "20px"
+  //    - margin-bottom: "10px"
+  //
+  // 2. After setting them, read back style.backgroundColor and
+  //    store it in a variable called `readBack`.
+  //
+  // 3. Now remove ONLY the inline font-size by setting it to ""
+  //    (this should make it fall back to the CSS value of 14px).
+  //    Store the value of style.fontSize AFTER removal in a
+  //    variable called `afterRemoval`.
+  //
+  // Note: style.fontSize after removal should be "" (empty string),
+  // because style only reflects inline styles, and we just removed it.
+  // ============================================================
+
+  const card1 = document.getElementById('card1');
+  let readBack;
+  let afterRemoval;
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 1 ---
+  (function testStub1() {
+    console.assert(card1.style.backgroundColor === 'lightyellow',
+      `STUB 1: style.backgroundColor should be "lightyellow", got "${card1.style.backgroundColor}".`);
+    console.assert(card1.style.borderRadius === '12px',
+      `STUB 1: style.borderRadius should be "12px", got "${card1.style.borderRadius}". Use camelCase: borderRadius.`);
+    console.assert(card1.style.marginBottom === '10px',
+      `STUB 1: style.marginBottom should be "10px", got "${card1.style.marginBottom}".`);
+
+    console.assert(readBack === 'lightyellow',
+      `STUB 1: readBack should be "lightyellow", got "${readBack}".`);
+
+    console.assert(card1.style.fontSize === '',
+      `STUB 1: After removal, style.fontSize should be "" (empty string), got "${card1.style.fontSize}". ` +
+      `Set style.fontSize = "" to remove the inline style.`);
+    console.assert(afterRemoval === '',
+      `STUB 1: afterRemoval should be "" (empty string), got "${afterRemoval}". ` +
+      `The style property only reflects inline styles. After removing the inline fontSize, it reads as "".`);
+
+    console.log('STUB 1: All tests passed!');
+  })();
+
+
+  // ============================================================
+  // STUB 2
+  //
+  // Given #card2 (has inline styles: color: green; font-style: italic;
+  //   letter-spacing: 2px):
+  //
+  // 1. First, read and store the current values:
+  //    - Store style.color in a variable called `beforeColor`
+  //    - Store style.fontStyle in a variable called `beforeFontStyle`
+  //
+  // 2. Use style.cssText to set the inline style to EXACTLY:
+  //      "background-color: peachpuff; padding: 24px; color: darkred;"
+  //    Remember: cssText OVERWRITES the entire inline style attribute.
+  //
+  // 3. After setting cssText, read and store:
+  //    - style.color in `afterColor`
+  //    - style.fontStyle in `afterFontStyle` (should be "" since
+  //      cssText replaced everything and didn't include fontStyle)
+  //    - style.letterSpacing in `afterLetterSpacing` (also gone)
+  //    - style.backgroundColor in `afterBg`
+  // ============================================================
+
+  const card2 = document.getElementById('card2');
+  let beforeColor, beforeFontStyle;
+  let afterColor, afterFontStyle, afterLetterSpacing, afterBg;
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 2 ---
+  (function testStub2() {
+    console.assert(beforeColor === 'green',
+      `STUB 2: beforeColor should be "green", got "${beforeColor}".`);
+    console.assert(beforeFontStyle === 'italic',
+      `STUB 2: beforeFontStyle should be "italic", got "${beforeFontStyle}".`);
+
+    console.assert(afterColor === 'darkred',
+      `STUB 2: afterColor should be "darkred", got "${afterColor}". Did you set cssText correctly?`);
+    console.assert(afterFontStyle === '',
+      `STUB 2: afterFontStyle should be "" (cssText replaced all inline styles, fontStyle is gone). Got "${afterFontStyle}".`);
+    console.assert(afterLetterSpacing === '',
+      `STUB 2: afterLetterSpacing should be "" (cssText replaced all inline styles). Got "${afterLetterSpacing}".`);
+    console.assert(afterBg === 'peachpuff',
+      `STUB 2: afterBg should be "peachpuff", got "${afterBg}".`);
+
+    console.assert(card2.style.padding === '24px',
+      `STUB 2: style.padding should be "24px", got "${card2.style.padding}".`);
+
+    console.log('STUB 2: All tests passed!');
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attributes and Properties - Step 3 Stubs</title>
+</head>
+<body>
+
+  <div id="widget-container">
+    <div class="widget"
+         data-widget-type="chart"
+         data-refresh-interval="30"
+         data-auto-resize="true"
+         data-source-url="/api/chart-data">
+      Chart Widget
+    </div>
+    <div class="widget"
+         data-widget-type="table"
+         data-refresh-interval="60"
+         data-auto-resize="false"
+         data-page-size="25">
+      Table Widget
+    </div>
+    <div class="widget"
+         data-widget-type="chart"
+         data-refresh-interval="10"
+         data-auto-resize="true"
+         data-source-url="/api/live-data"
+         data-is-premium="true">
+      Live Chart Widget
+    </div>
+  </div>
+
+  <script>
+    // ============================================================
+    // STUB 1: parseWidgetConfig
+    // ============================================================
+    // Write a function parseWidgetConfig(elem) that reads ALL data-*
+    // attributes from elem via the dataset property and returns a
+    // config object with parsed (not all-string) values:
+    //
+    // - If a dataset value is a string representation of a number
+    //   (e.g., "30"), convert it to a number.
+    // - If a dataset value is "true" or "false", convert to boolean.
+    // - Otherwise, keep it as a string.
+    //
+    // The returned object should use the camelCase dataset key names.
+    //
+    // Example for the first widget:
+    //   {
+    //     widgetType: "chart",        // string (not a number or bool)
+    //     refreshInterval: 30,        // number
+    //     autoResize: true,           // boolean
+    //     sourceUrl: "/api/chart-data" // string
+    //   }
+    //
+    // Use Object.entries on dataset plus reduce or map to build
+    // the result.
+
+    function parseWidgetConfig(elem) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // STUB 2: queryByDataAttrs
+    // ============================================================
+    // Write a function queryByDataAttrs(containerElem, criteria) that
+    // finds all elements within containerElem matching ALL the given
+    // data attribute criteria.
+    //
+    // criteria is an object like:
+    //   { widgetType: "chart", autoResize: "true" }
+    //
+    // The keys are camelCase dataset property names, the values are
+    // the expected string values of the corresponding data attributes.
+    //
+    // Return an array of objects, one per matching element:
+    //   [{ element: <the DOM element>, text: <its textContent trimmed>,
+    //      config: <result of parseWidgetConfig(element)> }, ...]
+    //
+    // Implementation notes:
+    // - Iterate over all child elements (use querySelectorAll('*') or
+    //   similar to get all descendants).
+    // - For each element, check if it has ALL the data attributes
+    //   specified in criteria with matching values.
+    // - Use dataset to read the values.
+    // - Use Array.prototype.every (from Part 1) to check all criteria.
+
+    function queryByDataAttrs(containerElem, criteria) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // TESTS
+    // ============================================================
+
+    const widgets = document.querySelectorAll('.widget');
+    const container = document.getElementById('widget-container');
+
+    // --- Tests for parseWidgetConfig ---
+
+    // Test widget 1: chart
+    const config1 = parseWidgetConfig(widgets[0]);
+    console.assert(
+      config1.widgetType === 'chart',
+      `Expected widgetType 'chart', got ${JSON.stringify(config1.widgetType)}. ` +
+      `'chart' is not a number or boolean, so keep as string.`
+    );
+    console.assert(
+      config1.refreshInterval === 30,
+      `Expected refreshInterval to be number 30, got ${JSON.stringify(config1.refreshInterval)} ` +
+      `(type: ${typeof config1.refreshInterval}). '30' should be parsed to a number.`
+    );
+    console.assert(
+      config1.autoResize === true,
+      `Expected autoResize to be boolean true, got ${JSON.stringify(config1.autoResize)} ` +
+      `(type: ${typeof config1.autoResize}). 'true' should be parsed to boolean.`
+    );
+    console.assert(
+      config1.sourceUrl === '/api/chart-data',
+      `Expected sourceUrl '/api/chart-data', got ${JSON.stringify(config1.sourceUrl)}.`
+    );
+
+    // Test widget 2: table
+    const config2 = parseWidgetConfig(widgets[1]);
+    console.assert(
+      config2.autoResize === false,
+      `Expected autoResize to be boolean false, got ${JSON.stringify(config2.autoResize)} ` +
+      `(type: ${typeof config2.autoResize}). 'false' should be parsed to boolean false.`
+    );
+    console.assert(
+      config2.pageSize === 25,
+      `Expected pageSize to be number 25, got ${JSON.stringify(config2.pageSize)} ` +
+      `(type: ${typeof config2.pageSize}).`
+    );
+    console.assert(
+      config2.sourceUrl === undefined,
+      `Widget 2 has no data-source-url, so sourceUrl should be undefined, ` +
+      `got ${JSON.stringify(config2.sourceUrl)}.`
+    );
+
+    // Test widget 3: live chart (has isPremium)
+    const config3 = parseWidgetConfig(widgets[2]);
+    console.assert(
+      config3.isPremium === true,
+      `Expected isPremium to be boolean true, got ${JSON.stringify(config3.isPremium)}.`
+    );
+    console.assert(
+      config3.refreshInterval === 10,
+      `Expected refreshInterval 10, got ${JSON.stringify(config3.refreshInterval)}.`
+    );
+
+    // Test with empty element (no data attributes)
+    const emptyEl = document.createElement('div');
+    const emptyConfig = parseWidgetConfig(emptyEl);
+    console.assert(
+      Object.keys(emptyConfig).length === 0,
+      `Element with no data-* attrs should produce empty config, ` +
+      `got ${JSON.stringify(emptyConfig)}.`
+    );
+
+    // Test that a value like "25abc" is NOT converted to number
+    const edgeEl = document.createElement('div');
+    edgeEl.dataset.weird = '25abc';
+    edgeEl.dataset.zero = '0';
+    const edgeConfig = parseWidgetConfig(edgeEl);
+    console.assert(
+      edgeConfig.weird === '25abc',
+      `'25abc' is not a pure number string, should stay as string, ` +
+      `got ${JSON.stringify(edgeConfig.weird)} (type: ${typeof edgeConfig.weird}).`
+    );
+    console.assert(
+      edgeConfig.zero === 0,
+      `'0' should be parsed to number 0, got ${JSON.stringify(edgeConfig.zero)} ` +
+      `(type: ${typeof edgeConfig.zero}).`
+    );
+
+    // --- Tests for queryByDataAttrs ---
+
+    // Find all charts
+    const charts = queryByDataAttrs(container, { widgetType: 'chart' });
+    console.assert(
+      charts.length === 2,
+      `Expected 2 chart widgets, got ${charts.length}.`
+    );
+    console.assert(
+      charts[0].text === 'Chart Widget',
+      `First chart text should be 'Chart Widget', got '${charts[0]?.text}'.`
+    );
+    console.assert(
+      charts[1].text === 'Live Chart Widget',
+      `Second chart text should be 'Live Chart Widget', got '${charts[1]?.text}'.`
+    );
+
+    // Find charts with autoResize=true
+    const autoCharts = queryByDataAttrs(container, { widgetType: 'chart', autoResize: 'true' });
+    console.assert(
+      autoCharts.length === 2,
+      `Expected 2 charts with autoResize=true, got ${autoCharts.length}. ` +
+      `Remember: criteria values are strings to match against dataset string values.`
+    );
+
+    // Find tables
+    const tables = queryByDataAttrs(container, { widgetType: 'table' });
+    console.assert(
+      tables.length === 1,
+      `Expected 1 table widget, got ${tables.length}.`
+    );
+    console.assert(
+      tables[0].config.refreshInterval === 60,
+      `Table's config.refreshInterval should be 60, got ${tables[0]?.config?.refreshInterval}. ` +
+      `The config should be the parsed result from parseWidgetConfig.`
+    );
+
+    // Find premium widgets
+    const premium = queryByDataAttrs(container, { isPremium: 'true' });
+    console.assert(
+      premium.length === 1,
+      `Expected 1 premium widget, got ${premium.length}.`
+    );
+    console.assert(
+      premium[0].text === 'Live Chart Widget',
+      `Premium widget should be 'Live Chart Widget'.`
+    );
+
+    // Query with criteria that match nothing
+    const none = queryByDataAttrs(container, { widgetType: 'graph' });
+    console.assert(
+      none.length === 0,
+      `No widgets have widgetType='graph', expected 0 results, got ${none.length}.`
+    );
+
+    // Query with multiple criteria that narrow results
+    const specific = queryByDataAttrs(container, {
+      widgetType: 'chart',
+      refreshInterval: '10'
+    });
+    console.assert(
+      specific.length === 1,
+      `Only the live chart has refreshInterval=10, expected 1, got ${specific.length}.`
+    );
+    console.assert(
+      specific[0].text === 'Live Chart Widget',
+      `Should be 'Live Chart Widget', got '${specific[0]?.text}'.`
+    );
+
+    console.log("All tests passed!");
+  </script>
+</body>
+</html>

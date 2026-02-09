@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 3 Snippets: Combined Multi-Level Navigation</title>
+</head>
+<body>
+
+  <!-- ============ SNIPPET 1 ============ -->
+  <!--
+    Multi-level navigation chaining both all-node and element-only.
+    Trace each chain carefully through the nested structure.
+  -->
+
+  <div id="snippet1">
+    <section>
+      <h2>Heading</h2>
+      <ul>
+        <li>Item A</li>
+        <li>Item B</li>
+        <li>Item C</li>
+      </ul>
+    </section>
+    <aside>
+      <p>Note</p>
+    </aside>
+  </div>
+
+  <script>
+    // --- Snippet 1 ---
+    const s1 = document.getElementById("snippet1");
+
+    // Chain 1: go to <section>, then its last element child (<ul>),
+    // then <ul>'s children count
+    const chain1 = s1.firstElementChild.lastElementChild.children.length;
+    console.log(chain1);
+
+    // Chain 2: from <section>, go to next element sibling, then into it
+    const chain2 = s1.firstElementChild.nextElementSibling.firstElementChild.textContent;
+    console.log(chain2);
+
+    // Chain 3: go to <ul> via element nav, then get second <li> via childNodes
+    const ul = s1.firstElementChild.lastElementChild;
+    // childNodes of <ul> includes whitespace text nodes
+    console.log(ul.childNodes.length);
+    console.log(ul.childNodes[3].textContent);
+
+    // Chain 4: from last <li>, walk up to <div id="snippet1">
+    const lastLi = ul.lastElementChild;
+    console.log(lastLi.parentNode.parentNode.parentNode.id);
+
+    // Chain 5: parentElement vs parentNode at the top
+    console.log(document.documentElement.parentNode === document);
+    console.log(document.documentElement.parentElement === null);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+
+  <!-- ============ SNIPPET 2 ============ -->
+  <!--
+    A function that traverses the DOM using closures and array methods
+    (Part 1 integration). Think about what nodes get collected.
+  -->
+
+  <table id="snippet2">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Alice</td>
+        <td>90</td>
+      </tr>
+      <tr>
+        <td>Bob</td>
+        <td>85</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    // --- Snippet 2 ---
+    const table = document.getElementById("snippet2");
+
+    // How many direct element children does <table> have?
+    console.log(table.children.length);
+
+    // Get <tbody>, then its element children (the <tr>s)
+    const tbody = table.lastElementChild;
+    console.log(tbody.tagName);
+    console.log(tbody.children.length);
+
+    // Use Array.from + map (Part 1 integration) to extract first cell text
+    // from each row in tbody
+    const firstCells = Array.from(tbody.children)
+      .map(tr => tr.firstElementChild.textContent);
+    console.log(firstCells.join(", "));
+
+    // Navigate from a <td> back up to the <table>
+    const aliceTd = tbody.firstElementChild.firstElementChild;
+    let ancestor = aliceTd;
+    const tags = [];
+    while (ancestor !== null) {
+      tags.push(ancestor.nodeName);
+      ancestor = ancestor.parentElement;
+    }
+    console.log(tags.join(" -> "));
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+</body>
+</html>

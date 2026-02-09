@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 1 Stubs: Basic Script Execution</title>
+</head>
+<body>
+
+  <div id="output-area"></div>
+
+  <script>
+    // ============================================================
+    // STUB 1
+    //
+    // Write a series of statements that:
+    // 1. Get the element with id "output-area"
+    // 2. Set its textContent to "Step 1 done"
+    // 3. Log the element's tagName to the console
+    //
+    // This exercises: the <script> tag running JS in the page,
+    // accessing DOM elements, and using console.log.
+    // ============================================================
+
+    // YOUR CODE HERE
+
+
+    // --- TESTS FOR STUB 1 ---
+    (function testStub1() {
+      const el = document.getElementById("output-area");
+      console.assert(
+        el.textContent === "Step 1 done",
+        `STUB 1 FAIL: expected textContent "Step 1 done", got "${el.textContent}". ` +
+        `Set the element's textContent property.`
+      );
+      console.log("STUB 1: passed");
+    })();
+  </script>
+
+
+  <ul id="log-list"></ul>
+
+  <script>
+    // ============================================================
+    // STUB 2
+    //
+    // Write code that creates 3 <li> elements with textContent
+    // "Message 1", "Message 2", "Message 3" and appends them to
+    // the <ul id="log-list">.
+    //
+    // This exercises: writing JS inside a <script> tag that
+    // manipulates the DOM. Use document.createElement and
+    // element.append (or appendChild).
+    //
+    // Note: this script tag is BELOW the <ul> in the document,
+    // so the <ul> is already parsed and available.
+    // ============================================================
+
+    // YOUR CODE HERE
+
+
+    // --- TESTS FOR STUB 2 ---
+    (function testStub2() {
+      const list = document.getElementById("log-list");
+      const items = list.children;
+
+      console.assert(
+        items.length === 3,
+        `STUB 2 FAIL: expected 3 <li> children, got ${items.length}. ` +
+        `Create 3 <li> elements and append them to #log-list.`
+      );
+
+      for (let i = 0; i < 3; i++) {
+        console.assert(
+          items[i] && items[i].tagName === "LI",
+          `STUB 2 FAIL: child ${i} should be an <li>, got ${items[i]?.tagName || "nothing"}.`
+        );
+        console.assert(
+          items[i].textContent === `Message ${i + 1}`,
+          `STUB 2 FAIL: <li> ${i} should say "Message ${i + 1}", got "${items[i].textContent}".`
+        );
+      }
+
+      console.log("STUB 2: passed");
+    })();
+  </script>
+
+</body>
+</html>

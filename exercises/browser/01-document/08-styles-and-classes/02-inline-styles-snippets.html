@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Step 2 Snippets: Inline styles, style property, cssText</title>
+<style>
+  #panel1 {
+    background-color: lightgray;
+    font-size: 16px;
+    padding: 10px;
+  }
+  #panel2 {
+    color: navy;
+    margin: 20px;
+    border: 1px solid black;
+  }
+</style>
+</head>
+<body>
+
+<div id="panel1">Panel 1</div>
+<div id="panel2" style="font-weight: bold; text-align: center;">Panel 2</div>
+
+<script>
+  // ============================================================
+  // SNIPPET 1
+  // style property reads/writes INLINE styles only, not CSS.
+  // Multi-word CSS properties use camelCase in JS.
+  // Setting a style property to "" removes that inline style.
+  // ============================================================
+
+  const panel1 = document.getElementById('panel1');
+
+  // panel1 has CSS styles but NO inline styles
+  console.log(panel1.style.backgroundColor);
+  console.log(panel1.style.fontSize);
+  console.log(panel1.style.padding);
+
+  // Set some inline styles (overrides CSS for these properties)
+  panel1.style.backgroundColor = 'salmon';
+  panel1.style.fontSize = '24px';
+  panel1.style.borderRadius = '8px';
+
+  // Now we can read the inline styles we just set
+  console.log(panel1.style.backgroundColor);
+  console.log(panel1.style.fontSize);
+
+  // The CSS padding is still NOT visible via style (not inline)
+  console.log(panel1.style.padding);
+
+  // Remove the inline backgroundColor — falls back to CSS "lightgray"
+  panel1.style.backgroundColor = '';
+  console.log(panel1.style.backgroundColor);
+
+  // YOUR ANSWER:
+
+
+  // ============================================================
+  // SNIPPET 2
+  // cssText overwrites the ENTIRE inline style attribute.
+  // Reading style properties after cssText.
+  // ============================================================
+
+  const panel2 = document.getElementById('panel2');
+
+  // panel2 has inline styles: font-weight: bold; text-align: center;
+  console.log(panel2.style.fontWeight);
+  console.log(panel2.style.textAlign);
+
+  // CSS-set color is NOT readable via style (it's from the stylesheet)
+  console.log(panel2.style.color);
+
+  // Add an inline style
+  panel2.style.color = 'red';
+  console.log(panel2.style.color);
+
+  // Now cssText OVERWRITES the entire inline style
+  panel2.style.cssText = 'margin-top: 5px; opacity: 0.8;';
+
+  // The old inline styles (fontWeight, textAlign, color) are GONE
+  console.log(panel2.style.fontWeight);
+  console.log(panel2.style.textAlign);
+  console.log(panel2.style.color);
+
+  // Only what we set in cssText remains
+  console.log(panel2.style.marginTop);
+  console.log(panel2.style.opacity);
+
+  // YOUR ANSWER:
+
+
+</script>
+</body>
+</html>

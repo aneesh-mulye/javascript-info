@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 3 Snippets: matches, closest, and Combined Searching</title>
+</head>
+<body>
+
+  <!-- ============ SNIPPET 1 ============ -->
+  <!--
+    matches() tests whether an element satisfies a CSS selector.
+    closest() walks UP the ancestor chain (including the element itself)
+    and returns the first ancestor matching the selector, or null.
+  -->
+
+  <div class="panel" data-type="warning">
+    <div class="panel-header">
+      <span class="icon">!</span>
+      <strong class="panel-title">Watch out</strong>
+    </div>
+    <div class="panel-body">
+      <p>This is a <em id="target1">warning</em> message.</p>
+    </div>
+  </div>
+
+  <script>
+    // --- Snippet 1 ---
+    const target = document.getElementById("target1");
+
+    console.log(target.matches("em"));
+    console.log(target.matches(".panel-body em"));
+    console.log(target.matches("#target1"));
+    console.log(target.matches("div"));
+
+    // closest walks UP (including self)
+    console.log(target.closest("p").tagName);
+    console.log(target.closest(".panel-body").tagName);
+    console.log(target.closest(".panel").dataset.type);
+    console.log(target.closest(".panel-title"));
+    console.log(target.closest("em") === target);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+
+  <!-- ============ SNIPPET 2 ============ -->
+  <!--
+    Combining search methods: querySelectorAll + filter with matches,
+    and using closest to classify elements. Part 1 integration with
+    array methods.
+  -->
+
+  <div id="app">
+    <section class="section-a">
+      <button class="btn primary">Save</button>
+      <button class="btn">Cancel</button>
+    </section>
+    <section class="section-b">
+      <button class="btn primary">Submit</button>
+      <button class="btn danger">Delete</button>
+      <button class="btn">Reset</button>
+    </section>
+  </div>
+
+  <script>
+    // --- Snippet 2 ---
+    const app = document.getElementById("app");
+
+    // Get all buttons, filter to only "primary" ones
+    const allBtns = app.querySelectorAll(".btn");
+    const primaryBtns = Array.from(allBtns).filter(btn => btn.matches(".primary"));
+    console.log(primaryBtns.length);
+    console.log(primaryBtns.map(b => b.textContent).join(", "));
+
+    // Use closest to find which section each primary button is in
+    const sections = primaryBtns.map(btn => btn.closest("section").className);
+    console.log(sections.join(", "));
+
+    // Find all buttons in section-b, then get their class lists as arrays
+    const sectionB = app.querySelector(".section-b");
+    const sectionBBtns = sectionB.querySelectorAll(".btn");
+    const classLists = Array.from(sectionBBtns).map(
+      btn => Array.from(btn.classList).sort().join("+")
+    );
+    console.log(classLists.join(", "));
+
+    // Does the danger button's closest(".section-a") find anything?
+    const dangerBtn = app.querySelector(".danger");
+    console.log(dangerBtn.closest(".section-a"));
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+    //
+  </script>
+
+</body>
+</html>

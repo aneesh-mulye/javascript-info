@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head><title>Step 1 Snippets: createElement, append/prepend/before/after</title></head>
+<body>
+
+<div id="container">
+  <p id="existing">I was here first.</p>
+</div>
+
+<hr>
+
+<ul id="menu">
+  <li id="item-home">Home</li>
+  <li id="item-about">About</li>
+</ul>
+
+<script>
+  // ============================================================
+  // SNIPPET 1
+  // Creating elements and inserting at various positions.
+  // Strings passed to append/prepend/before/after become text nodes.
+  // ============================================================
+
+  const container = document.getElementById('container');
+  const existing = document.getElementById('existing');
+
+  const div1 = document.createElement('div');
+  div1.textContent = 'Appended div';
+
+  const div2 = document.createElement('div');
+  div2.innerHTML = '<em>Prepended div</em>';
+
+  container.append(div1);
+  container.prepend(div2);
+  existing.before('Text before existing. ');
+  existing.after(' Text after existing.');
+
+  // Now let's move div1 — inserting it somewhere else removes it
+  // from its current position automatically.
+  container.prepend(div1);
+
+  const children = [];
+  for (const node of container.childNodes) {
+    if (node.nodeType === 1) {
+      children.push(`E:${node.tagName}:${node.textContent.trim()}`);
+    } else if (node.nodeType === 3) {
+      const t = node.textContent.trim();
+      if (t) children.push(`T:${t}`);
+    }
+  }
+  console.log(children.join(' | '));
+
+  // YOUR ANSWER:
+
+
+  // ============================================================
+  // SNIPPET 2
+  // Append/prepend accept multiple arguments, mixing nodes and strings.
+  // Strings become text nodes, NOT parsed as HTML.
+  // ============================================================
+
+  const menu = document.getElementById('menu');
+
+  const liSearch = document.createElement('li');
+  liSearch.textContent = 'Search';
+
+  const liContact = document.createElement('li');
+  liContact.textContent = 'Contact';
+
+  // append accepts multiple args: nodes and strings mixed
+  menu.append(liContact, ' (end of menu)');
+
+  // prepend also accepts multiple args
+  menu.prepend('(start of menu) ', liSearch);
+
+  // This string contains HTML tags — but append treats it as TEXT, not HTML
+  menu.append('<li>Fake item</li>');
+
+  const parts = [];
+  for (const node of menu.childNodes) {
+    if (node.nodeType === 1) {
+      parts.push(`<li>${node.textContent}`);
+    } else if (node.nodeType === 3) {
+      const t = node.textContent.trim();
+      if (t) parts.push(`text:${t}`);
+    }
+  }
+  console.log(parts.join(' | '));
+
+  // Now move item-home to the end of the menu
+  const itemHome = document.getElementById('item-home');
+  menu.append(itemHome);
+
+  console.log(menu.children.length); // how many <li> elements?
+
+  const liTexts = Array.from(menu.children).map(li => li.textContent);
+  console.log(liTexts.join(', '));
+
+  // YOUR ANSWER:
+
+
+</script>
+</body>
+</html>

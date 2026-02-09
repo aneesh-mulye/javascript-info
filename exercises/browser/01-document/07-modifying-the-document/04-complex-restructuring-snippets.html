@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head><title>Step 4 Snippets: Complex DOM restructuring</title></head>
+<body>
+
+<div id="scene1">
+  <div id="box-a" class="box">
+    <span id="item-1">One</span>
+    <span id="item-2">Two</span>
+    <span id="item-3">Three</span>
+  </div>
+  <div id="box-b" class="box"></div>
+</div>
+
+<hr>
+
+<div id="scene2">
+  <ul id="unsorted">
+    <li data-priority="3">Low: Write docs</li>
+    <li data-priority="1">High: Fix crash</li>
+    <li data-priority="2">Medium: Add tests</li>
+    <li data-priority="1">High: Patch security</li>
+    <li data-priority="3">Low: Refactor utils</li>
+  </ul>
+  <div id="sorted-output"></div>
+</div>
+
+<script>
+  // ============================================================
+  // SNIPPET 1
+  // Moving nodes between containers. A node can only be in one
+  // place — inserting it elsewhere removes it from the original.
+  // Combining cloneNode, append, before, after, replaceWith.
+  // ============================================================
+
+  const boxA = document.getElementById('box-a');
+  const boxB = document.getElementById('box-b');
+  const item1 = document.getElementById('item-1');
+  const item2 = document.getElementById('item-2');
+  const item3 = document.getElementById('item-3');
+
+  // Move item-2 to box-b (this REMOVES it from box-a)
+  boxB.append(item2);
+
+  // Clone item-1 and put the clone in box-b too
+  const item1Clone = item1.cloneNode(true);
+  item1Clone.id = 'item-1-clone';
+  item1Clone.textContent = 'One (clone)';
+  boxB.prepend(item1Clone);
+
+  // Now replace item-3 (still in box-a) with a new element
+  const item4 = document.createElement('span');
+  item4.id = 'item-4';
+  item4.textContent = 'Four';
+  item3.replaceWith(item4);
+
+  // Insert item-3 (which was removed by replaceWith) into box-b
+  boxB.append(item3);
+
+  // Move item-1 (the original, not the clone) from box-a to
+  // between item1Clone and item2 in box-b
+  item1Clone.after(item1);
+
+  console.log('box-a children:', Array.from(boxA.children).map(e => e.textContent).join(', '));
+  console.log('box-b children:', Array.from(boxB.children).map(e => e.textContent).join(', '));
+
+  // Is box-a's only remaining child item-4?
+  console.log(boxA.children.length === 1 && boxA.firstElementChild.id === 'item-4');
+
+  // YOUR ANSWER:
+
+
+  // ============================================================
+  // SNIPPET 2
+  // Building a sorted, grouped structure from existing DOM nodes.
+  // Uses array methods (sort, filter, forEach, map) from Part 1.
+  // Uses DocumentFragment for batch insertion.
+  // ============================================================
+
+  const unsorted = document.getElementById('unsorted');
+  const sortedOutput = document.getElementById('sorted-output');
+
+  // Grab all <li> elements and sort by data-priority (ascending)
+  const allLis = Array.from(unsorted.querySelectorAll('li'));
+  const sorted = allLis
+    .map(li => ({ node: li, priority: Number(li.dataset.priority) }))
+    .sort((a, b) => a.priority - b.priority);
+
+  // Group by priority: create a <div> for each priority level
+  const groups = {};
+  sorted.forEach(({ node, priority }) => {
+    if (!groups[priority]) {
+      const groupDiv = document.createElement('div');
+      groupDiv.className = 'priority-group';
+      const heading = document.createElement('h4');
+      heading.textContent = `Priority ${priority}`;
+      groupDiv.append(heading);
+      const ul = document.createElement('ul');
+      groupDiv.append(ul);
+      groups[priority] = groupDiv;
+    }
+    // This MOVES the original <li> node out of #unsorted
+    groups[priority].querySelector('ul').append(node);
+  });
+
+  // Use a fragment to batch-insert all groups
+  const frag = document.createDocumentFragment();
+  Object.keys(groups)
+    .sort((a, b) => a - b)
+    .forEach(key => frag.append(groups[key]));
+  sortedOutput.append(frag);
+
+  // How many <li> remain in the original #unsorted list?
+  console.log(unsorted.querySelectorAll('li').length);
+
+  // How many .priority-group divs in sorted-output?
+  console.log(sortedOutput.querySelectorAll('.priority-group').length);
+
+  // What are all <li> texts in priority order?
+  const finalLis = Array.from(sortedOutput.querySelectorAll('li'))
+    .map(li => li.textContent);
+  console.log(finalLis.join(' | '));
+
+  // YOUR ANSWER:
+
+
+</script>
+</body>
+</html>

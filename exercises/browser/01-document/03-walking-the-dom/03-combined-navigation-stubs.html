@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 3 Stubs: Combined Multi-Level Navigation</title>
+</head>
+<body>
+
+  <div id="tree">
+    <div class="branch" data-depth="1">
+      <div class="branch" data-depth="2">
+        <span class="leaf">A</span>
+        <span class="leaf">B</span>
+      </div>
+      <div class="branch" data-depth="2">
+        <span class="leaf">C</span>
+      </div>
+    </div>
+    <div class="branch" data-depth="1">
+      <span class="leaf">D</span>
+      <span class="leaf">E</span>
+      <!-- pruned leaf -->
+      <span class="leaf">F</span>
+    </div>
+  </div>
+
+  <nav id="breadcrumb">
+    <ol>
+      <li>
+        <a href="/">Home</a>
+      </li>
+      <li>
+        <a href="/products">Products</a>
+      </li>
+      <li>
+        <a href="/products/widgets">Widgets</a>
+      </li>
+    </ol>
+  </nav>
+
+  <script>
+    // === STUB 1 ===
+    // Write a function `collectLeafTexts(rootElement)` that recursively
+    // traverses the DOM tree starting from rootElement and collects the
+    // textContent of every element that has NO element children
+    // (i.e., it is a "leaf" in the element tree).
+    //
+    // Use element-only navigation (children, firstElementChild, nextElementSibling)
+    // for traversal. Return an array of strings.
+    //
+    // This exercises recursion (Part 1) combined with DOM element-only navigation.
+
+    function collectLeafTexts(rootElement) {
+      // YOUR CODE HERE
+    }
+
+
+    // === STUB 2 ===
+    // Write a function `getAncestorChain(element)` that, given a DOM element,
+    // returns an array of objects describing each ancestor from the element
+    // itself up to (and including) the <body> element. Each object should be:
+    //   { tag: "TAGNAME", childIndex: n }
+    // where childIndex is the element's index among its parent's element
+    // children (0-based). For <body> itself, childIndex should be 0
+    // (its index under <html>).
+    //
+    // Use parentElement and element-only sibling navigation to determine
+    // the index. Do NOT use Array.from(parent.children).indexOf().
+    // Instead, count previousElementSiblings manually.
+    //
+    // Stop when you reach <body> (include it). If the element is detached
+    // (parentElement becomes null before reaching body), return an empty array.
+
+    function getAncestorChain(element) {
+      // YOUR CODE HERE
+    }
+
+
+    // === TESTS ===
+
+    // Tests for Stub 1
+    const tree = document.getElementById("tree");
+    const leafTexts = collectLeafTexts(tree);
+
+    console.assert(
+      Array.isArray(leafTexts),
+      `Stub 1 FAIL: expected an array, got ${typeof leafTexts}.`
+    );
+    console.assert(
+      leafTexts.length === 6,
+      `Stub 1 FAIL: expected 6 leaf texts (A, B, C, D, E, F), got ${leafTexts.length}. ` +
+      `A "leaf" element is one with children.length === 0. Make sure you recurse into ` +
+      `all branches and only collect from elements with no element children.`
+    );
+    console.assert(
+      leafTexts[0] === "A" && leafTexts[1] === "B",
+      `Stub 1 FAIL: expected first two leaves to be "A" and "B", ` +
+      `got "${leafTexts[0]}" and "${leafTexts[1]}". Ensure depth-first traversal order.`
+    );
+    console.assert(
+      leafTexts[3] === "D" && leafTexts[5] === "F",
+      `Stub 1 FAIL: expected leaves at index 3 and 5 to be "D" and "F", ` +
+      `got "${leafTexts[3]}" and "${leafTexts[5]}".`
+    );
+
+    // Test on breadcrumb: the <a> elements are leaves
+    const breadcrumb = document.getElementById("breadcrumb");
+    const breadcrumbLeaves = collectLeafTexts(breadcrumb);
+    console.assert(
+      breadcrumbLeaves.length === 3,
+      `Stub 1 FAIL: expected 3 leaves in breadcrumb (<a> tags), got ${breadcrumbLeaves.length}. ` +
+      `Each <a> has no element children, so it is a leaf. The <li> and <ol> have element children.`
+    );
+    console.assert(
+      breadcrumbLeaves[2] === "Widgets",
+      `Stub 1 FAIL: expected third breadcrumb leaf to be "Widgets", got "${breadcrumbLeaves[2]}".`
+    );
+
+    // Tests for Stub 2
+    // Get the <span> with text "C" — it's in tree > branch[0] > branch[1] > span[0]
+    const branchDepth1First = tree.firstElementChild;
+    const branchDepth2Second = branchDepth1First.lastElementChild;
+    const spanC = branchDepth2Second.firstElementChild;
+
+    console.assert(
+      spanC.textContent === "C",
+      `Test setup check: expected spanC to be "C", got "${spanC.textContent}".`
+    );
+
+    const chainC = getAncestorChain(spanC);
+    console.assert(
+      Array.isArray(chainC) && chainC.length > 0,
+      `Stub 2 FAIL: expected a non-empty array for ancestor chain.`
+    );
+
+    // spanC: index 0 among branch-depth2-second's children
+    console.assert(
+      chainC[0].tag === "SPAN" && chainC[0].childIndex === 0,
+      `Stub 2 FAIL: expected first entry {tag: "SPAN", childIndex: 0}, ` +
+      `got {tag: "${chainC[0].tag}", childIndex: ${chainC[0].childIndex}}. ` +
+      `The <span>C</span> is the first (only) element child of its parent.`
+    );
+
+    // branchDepth2Second: index 1 among branchDepth1First's children
+    console.assert(
+      chainC[1].tag === "DIV" && chainC[1].childIndex === 1,
+      `Stub 2 FAIL: expected second entry {tag: "DIV", childIndex: 1}, ` +
+      `got {tag: "${chainC[1].tag}", childIndex: ${chainC[1].childIndex}}. ` +
+      `The second depth-2 branch is at element index 1 among its parent's children.`
+    );
+
+    // branchDepth1First: index 0 among tree's children
+    console.assert(
+      chainC[2].tag === "DIV" && chainC[2].childIndex === 0,
+      `Stub 2 FAIL: expected third entry {tag: "DIV", childIndex: 0}, ` +
+      `got {tag: "${chainC[2].tag}", childIndex: ${chainC[2].childIndex}}.`
+    );
+
+    // tree: check its index among body's element children
+    console.assert(
+      chainC[3].tag === "DIV",
+      `Stub 2 FAIL: expected fourth entry tag to be "DIV" (#tree), ` +
+      `got "${chainC[3].tag}".`
+    );
+
+    // last entry should be BODY
+    const lastEntry = chainC[chainC.length - 1];
+    console.assert(
+      lastEntry.tag === "BODY",
+      `Stub 2 FAIL: expected last entry to be BODY, got "${lastEntry.tag}". ` +
+      `The chain should include <body> and stop there.`
+    );
+
+    // Detached element test
+    const detached = document.createElement("div");
+    const detachedChild = document.createElement("span");
+    detached.appendChild(detachedChild);
+    const detachedChain = getAncestorChain(detachedChild);
+    console.assert(
+      detachedChain.length === 0,
+      `Stub 2 FAIL: expected empty array for detached element, got length ${detachedChain.length}. ` +
+      `A detached element cannot reach <body>, so return [].`
+    );
+
+    console.log("All tests passed!");
+  </script>
+
+</body>
+</html>

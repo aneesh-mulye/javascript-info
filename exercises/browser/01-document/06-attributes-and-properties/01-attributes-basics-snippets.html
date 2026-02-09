@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attributes and Properties - Step 1 Snippets</title>
+</head>
+<body>
+
+  <!-- Snippet 1: Standard vs non-standard attributes -->
+  <div id="hero"
+       class="main-panel"
+       data-role="admin"
+       custom-flag="yes"
+       tabindex="0">
+    Hero section
+  </div>
+
+  <input id="email-input"
+         type="email"
+         value="user@example.com"
+         placeholder="Enter email"
+         required
+         nonstandard-attr="test123">
+
+  <!-- Snippet 2: getAttribute, setAttribute, hasAttribute, attributes collection -->
+  <a id="nav-link"
+     href="/about"
+     title="About Us"
+     target="_blank">
+    About
+  </a>
+
+  <script>
+    // ============================================================
+    // SNIPPET 1: Standard vs non-standard attributes and properties
+    // ============================================================
+
+    const hero = document.getElementById('hero');
+
+    // Which of these exist as DOM properties?
+    console.log("hero.id:", hero.id);
+    console.log("hero.className:", hero.className);
+    console.log("hero.tabIndex:", hero.tabIndex);
+
+    // Non-standard attributes: do they become properties?
+    console.log("hero['data-role']:", hero['data-role']);
+    console.log("hero['custom-flag']:", hero['custom-flag']);
+    console.log("hero.customFlag:", hero.customFlag);
+
+    // But we CAN access them with getAttribute
+    console.log("getAttribute('data-role'):", hero.getAttribute('data-role'));
+    console.log("getAttribute('custom-flag'):", hero.getAttribute('custom-flag'));
+
+    console.log("---");
+
+    const emailInput = document.getElementById('email-input');
+    // Standard attributes become properties
+    console.log("type property:", emailInput.type);
+    console.log("value property:", emailInput.value);
+    console.log("required property:", emailInput.required);
+    console.log("typeof required:", typeof emailInput.required);
+
+    // Non-standard does NOT
+    console.log("nonstandard-attr property:", emailInput['nonstandard-attr']);
+    console.log("getAttribute nonstandard:", emailInput.getAttribute('nonstandard-attr'));
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+
+    // ============================================================
+    // SNIPPET 2: getAttribute, setAttribute, hasAttribute, attributes
+    // ============================================================
+
+    const link = document.getElementById('nav-link');
+
+    console.log("hasAttribute('href'):", link.hasAttribute('href'));
+    console.log("hasAttribute('rel'):", link.hasAttribute('rel'));
+
+    // getAttribute returns the raw attribute value
+    console.log("getAttribute('href'):", link.getAttribute('href'));
+    // The property gives the full URL
+    console.log("link.href:", link.href);
+
+    console.log("---");
+
+    // setAttribute: add a new attribute
+    link.setAttribute('rel', 'noopener');
+    console.log("After setAttribute - hasAttribute('rel'):", link.hasAttribute('rel'));
+    console.log("After setAttribute - getAttribute('rel'):", link.getAttribute('rel'));
+
+    // setAttribute with non-standard attribute
+    link.setAttribute('data-tracking', 'nav-about');
+    console.log("data-tracking property:", link['data-tracking']);
+    console.log("data-tracking getAttribute:", link.getAttribute('data-tracking'));
+
+    console.log("---");
+
+    // The attributes collection (NamedNodeMap)
+    const attrs = link.attributes;
+    console.log("attributes.length:", attrs.length);
+
+    // attributes are iterable; collect names
+    const attrNames = Array.from(attrs).map(a => a.name);
+    console.log("attribute names:", attrNames);
+    console.log("first attr value:", attrs[0].value);
+
+    // YOUR ANSWER:
+    //
+    //
+    //
+    //
+
+  </script>
+</body>
+</html>

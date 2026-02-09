@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Step 3 Stubs: getComputedStyle and combining styles with classes</title>
+<style>
+  .box {
+    width: 200px;
+    height: 100px;
+    padding: 10px;
+    margin: 5px;
+    background-color: cornsilk;
+    color: #333;
+    font-size: 16px;
+    border: 2px solid gray;
+  }
+  .highlighted {
+    background-color: gold;
+    border-color: orange;
+  }
+  .large-text {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  #styled-box::after {
+    content: " (info)";
+    color: blue;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<div id="styled-box" class="box">Styled Box</div>
+
+<hr>
+
+<div id="elements-row">
+  <div class="box" data-expected-bg="tomato">A</div>
+  <div class="box" data-expected-bg="skyblue">B</div>
+  <div class="box" data-expected-bg="lightgreen">C</div>
+</div>
+
+<script>
+  // ============================================================
+  // STUB 1
+  //
+  // Given #styled-box (class="box"):
+  //
+  // Write a function `getStyleInfo(elem)` that returns an object with:
+  //   {
+  //     inlineBg:    <string — elem.style.backgroundColor>,
+  //     computedBg:  <string — getComputedStyle(elem).backgroundColor>,
+  //     computedFontSize: <string — getComputedStyle(elem).fontSize>,
+  //     pseudoColor: <string — getComputedStyle(elem, '::after').color>
+  //   }
+  //
+  // Then:
+  //
+  // 1. Call getStyleInfo on #styled-box and store in `info1`.
+  //    (At this point, no inline bg, computed bg = cornsilk from .box)
+  //
+  // 2. Add the "highlighted" class to #styled-box.
+  //    Call getStyleInfo again, store in `info2`.
+  //    (Computed bg should now be gold from .highlighted)
+  //
+  // 3. Set an inline style: style.backgroundColor = "tomato".
+  //    Call getStyleInfo again, store in `info3`.
+  //    (Inline style beats class — computed bg should be tomato)
+  //
+  // 4. Remove the inline backgroundColor (set to "").
+  //    Call getStyleInfo again, store in `info4`.
+  //    (Falls back to .highlighted class — computed bg = gold)
+  // ============================================================
+
+  const styledBox = document.getElementById('styled-box');
+
+  let info1, info2, info3, info4;
+
+  // YOUR CODE HERE (define getStyleInfo and collect info1-info4):
+
+
+
+  // --- TESTS FOR STUB 1 ---
+  (function testStub1() {
+    // Check that getStyleInfo is a function
+    console.assert(typeof getStyleInfo === 'function',
+      'STUB 1: getStyleInfo should be a function.');
+
+    // info1: no inline bg, computed bg is cornsilk
+    console.assert(info1.inlineBg === '',
+      `STUB 1 info1: inlineBg should be "" (no inline bg set), got "${info1.inlineBg}". ` +
+      `style.backgroundColor only reads INLINE styles.`);
+    // Computed color value will be in rgb() format
+    console.assert(info1.computedBg !== '',
+      'STUB 1 info1: computedBg should not be empty (CSS .box sets background-color).');
+    console.assert(info1.computedFontSize === '16px',
+      `STUB 1 info1: computedFontSize should be "16px", got "${info1.computedFontSize}".`);
+    console.assert(info1.pseudoColor !== '',
+      'STUB 1 info1: pseudoColor should not be empty (::after has color: blue).');
+
+    // info2: after adding .highlighted class
+    console.assert(info2.inlineBg === '',
+      `STUB 1 info2: inlineBg should still be "" (class doesn't set inline style), got "${info2.inlineBg}".`);
+    // gold in rgb is rgb(255, 215, 0)
+    console.assert(info2.computedBg !== info1.computedBg,
+      `STUB 1 info2: computedBg should change after adding .highlighted class. Got same value as before: "${info2.computedBg}".`);
+
+    // info3: after setting inline bg to tomato
+    console.assert(info3.inlineBg === 'tomato',
+      `STUB 1 info3: inlineBg should be "tomato", got "${info3.inlineBg}".`);
+    // Computed bg should reflect the inline override (tomato)
+    console.assert(info3.computedBg !== info2.computedBg,
+      `STUB 1 info3: computedBg should change (inline overrides class). Got "${info3.computedBg}".`);
+
+    // info4: after removing inline bg
+    console.assert(info4.inlineBg === '',
+      `STUB 1 info4: inlineBg should be "" after removal, got "${info4.inlineBg}".`);
+    console.assert(info4.computedBg === info2.computedBg,
+      `STUB 1 info4: After removing inline bg, computedBg should fall back to .highlighted (same as info2). ` +
+      `Got "${info4.computedBg}" vs info2's "${info2.computedBg}".`);
+
+    console.log('STUB 1: All tests passed!');
+  })();
+
+
+  // ============================================================
+  // STUB 2
+  //
+  // Given 3 .box divs inside #elements-row, each with a
+  // data-expected-bg attribute ("tomato", "skyblue", "lightgreen"):
+  //
+  // Write a function `applyAndVerify(elements)` that:
+  //   1. Takes an array (or NodeList) of elements.
+  //   2. For each element:
+  //      a. Read its data-expected-bg attribute.
+  //      b. Set style.backgroundColor to that value.
+  //      c. Read getComputedStyle(elem).backgroundColor.
+  //      d. Collect an object { expected, applied, computedBg }
+  //         where expected = the data-expected-bg string,
+  //         applied = the style.backgroundColor after setting it,
+  //         computedBg = the getComputedStyle result.
+  //   3. Returns the array of collected objects.
+  //
+  // Call it on the 3 boxes and store the result in `results`.
+  //
+  // Use Array.from and .map (Part 1 array skills).
+  // ============================================================
+
+  const elementsRow = document.getElementById('elements-row');
+  let results;
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 2 ---
+  (function testStub2() {
+    console.assert(typeof applyAndVerify === 'function',
+      'STUB 2: applyAndVerify should be a function.');
+
+    console.assert(Array.isArray(results),
+      'STUB 2: results should be an array.');
+    console.assert(results.length === 3,
+      `STUB 2: results should have 3 entries, got ${results.length}.`);
+
+    const expectedBgs = ['tomato', 'skyblue', 'lightgreen'];
+
+    results.forEach((r, i) => {
+      console.assert(r.expected === expectedBgs[i],
+        `STUB 2: results[${i}].expected should be "${expectedBgs[i]}", got "${r.expected}".`);
+      console.assert(r.applied === expectedBgs[i],
+        `STUB 2: results[${i}].applied should be "${expectedBgs[i]}", got "${r.applied}". ` +
+        `After setting style.backgroundColor, reading it back should give the value you set.`);
+      console.assert(r.computedBg !== '' && r.computedBg !== undefined,
+        `STUB 2: results[${i}].computedBg should not be empty.`);
+    });
+
+    // Verify the actual inline styles were set on the elements
+    const boxes = elementsRow.querySelectorAll('.box');
+    boxes.forEach((box, i) => {
+      console.assert(box.style.backgroundColor === expectedBgs[i],
+        `STUB 2: Box ${i} inline backgroundColor should be "${expectedBgs[i]}", got "${box.style.backgroundColor}".`);
+    });
+
+    console.log('STUB 2: All tests passed!');
+  })();
+</script>
+</body>
+</html>

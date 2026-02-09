@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Step 1 Stubs: className and classList</title>
+<style>
+  .error { border: 2px solid red; }
+  .warning { border: 2px solid orange; }
+  .success { border: 2px solid green; }
+  .dimmed { opacity: 0.5; }
+  .large { font-size: 24px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div id="msg1" class="error dimmed">Message 1</div>
+<div id="msg2" class="warning large">Message 2</div>
+
+<hr>
+
+<ul id="items">
+  <li class="active">Item A</li>
+  <li>Item B</li>
+  <li class="active">Item C</li>
+  <li>Item D</li>
+  <li class="active">Item E</li>
+</ul>
+
+<script>
+  // ============================================================
+  // STUB 1
+  //
+  // Given #msg1 (currently has classes: "error dimmed") and
+  // #msg2 (currently has classes: "warning large"):
+  //
+  // 1. On #msg1:
+  //    - Remove the "error" class using classList.
+  //    - Add the "success" class using classList.
+  //    - The "dimmed" class should remain untouched.
+  //    Final classes for #msg1: "dimmed success" (order may vary)
+  //
+  // 2. On #msg2:
+  //    - Replace ALL classes with exactly "error hidden" using
+  //      className (not classList). This should remove "warning"
+  //      and "large" entirely.
+  //    Final classes for #msg2: "error hidden"
+  // ============================================================
+
+  const msg1 = document.getElementById('msg1');
+  const msg2 = document.getElementById('msg2');
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 1 ---
+  (function testStub1() {
+    // msg1 checks
+    console.assert(!msg1.classList.contains('error'),
+      'STUB 1: #msg1 should NOT have class "error". Did you remove it with classList.remove?');
+    console.assert(msg1.classList.contains('success'),
+      'STUB 1: #msg1 should have class "success". Did you add it with classList.add?');
+    console.assert(msg1.classList.contains('dimmed'),
+      'STUB 1: #msg1 should still have class "dimmed". classList.add/remove should not affect other classes.');
+    console.assert(msg1.classList.length === 2,
+      `STUB 1: #msg1 should have exactly 2 classes, got ${msg1.classList.length}.`);
+
+    // msg2 checks
+    console.assert(msg2.classList.contains('error'),
+      'STUB 1: #msg2 should have class "error".');
+    console.assert(msg2.classList.contains('hidden'),
+      'STUB 1: #msg2 should have class "hidden".');
+    console.assert(!msg2.classList.contains('warning'),
+      'STUB 1: #msg2 should NOT have class "warning". Setting className replaces ALL classes.');
+    console.assert(!msg2.classList.contains('large'),
+      'STUB 1: #msg2 should NOT have class "large". Setting className replaces ALL classes.');
+    console.assert(msg2.classList.length === 2,
+      `STUB 1: #msg2 should have exactly 2 classes, got ${msg2.classList.length}.`);
+
+    console.log('STUB 1: All tests passed!');
+  })();
+
+
+  // ============================================================
+  // STUB 2
+  //
+  // Given the <ul id="items"> with 5 <li> elements, some with
+  // class "active" and some without:
+  //
+  // 1. Use classList.toggle on EVERY <li> to flip the "active" state:
+  //    - Items that have "active" should lose it.
+  //    - Items that don't have "active" should gain it.
+  //    (Use Array.from and forEach, or a for loop.)
+  //
+  // 2. Collect the return values of each toggle call into an array
+  //    called `toggleResults`.
+  //    (Remember: toggle returns true if the class was ADDED,
+  //     false if it was REMOVED.)
+  //
+  // After toggling:
+  //   Item A: was active -> now NOT active (toggle returns false)
+  //   Item B: was not active -> now active (toggle returns true)
+  //   Item C: was active -> now NOT active (toggle returns false)
+  //   Item D: was not active -> now active (toggle returns true)
+  //   Item E: was active -> now NOT active (toggle returns false)
+  // ============================================================
+
+  const items = document.getElementById('items');
+  let toggleResults = [];
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 2 ---
+  (function testStub2() {
+    const lis = items.querySelectorAll('li');
+
+    const expectedActive = [false, true, false, true, false];
+    const expectedToggleReturn = [false, true, false, true, false];
+
+    lis.forEach((li, i) => {
+      const hasActive = li.classList.contains('active');
+      console.assert(hasActive === expectedActive[i],
+        `STUB 2: Item ${i} ("${li.textContent}") should ${expectedActive[i] ? 'have' : 'NOT have'} "active" class. ` +
+        `toggle flips the current state.`);
+    });
+
+    console.assert(Array.isArray(toggleResults),
+      'STUB 2: toggleResults should be an array.');
+    console.assert(toggleResults.length === 5,
+      `STUB 2: toggleResults should have 5 entries, got ${toggleResults.length}.`);
+
+    toggleResults.forEach((val, i) => {
+      console.assert(val === expectedToggleReturn[i],
+        `STUB 2: toggleResults[${i}] should be ${expectedToggleReturn[i]} (toggle returns true when class is ADDED, false when REMOVED). Got ${val}.`);
+    });
+
+    console.log('STUB 2: All tests passed!');
+  })();
+</script>
+</body>
+</html>

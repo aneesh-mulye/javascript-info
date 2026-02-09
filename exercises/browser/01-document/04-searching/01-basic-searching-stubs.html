@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Step 1 Stubs: getElementById and querySelector Basics</title>
+</head>
+<body>
+
+  <div id="gallery">
+    <div class="card featured" data-id="1">
+      <h3 class="card-title">Sunset</h3>
+      <p class="card-desc">A beautiful sunset.</p>
+    </div>
+    <div class="card" data-id="2">
+      <h3 class="card-title">Mountains</h3>
+      <p class="card-desc">Snow-capped peaks.</p>
+    </div>
+    <div class="card" data-id="3">
+      <h3 class="card-title">Ocean</h3>
+      <p class="card-desc">Deep blue sea.</p>
+    </div>
+  </div>
+
+  <script>
+    // === STUB 1 ===
+    // Write a function `getCardInfo(dataId)` that takes a data-id value
+    // (as a string) and returns an object { title: "...", desc: "..." }
+    // with the card's title and description text.
+    // Use querySelector with an attribute selector to find the card by data-id,
+    // then querySelector again (scoped to the card) to find .card-title and
+    // .card-desc within it.
+    // Return null if no card with that data-id exists.
+
+    function getCardInfo(dataId) {
+      // YOUR CODE HERE
+    }
+
+
+    // === STUB 2 ===
+    // Write a function `findFirstBySelectors(selectors)` that takes an array
+    // of CSS selector strings, tries each one with document.querySelector
+    // in order, and returns the textContent of the FIRST selector that finds
+    // a match. If none of the selectors match anything, return null.
+    // This exercises array iteration (Part 1) with querySelector.
+
+    function findFirstBySelectors(selectors) {
+      // YOUR CODE HERE
+    }
+
+
+    // === TESTS ===
+
+    // Tests for Stub 1
+    const card1 = getCardInfo("1");
+    console.assert(
+      card1 !== null,
+      `Stub 1 FAIL: getCardInfo("1") returned null. ` +
+      `Use querySelector('[data-id="1"]') to find the card.`
+    );
+    console.assert(
+      card1.title === "Sunset",
+      `Stub 1 FAIL: expected title "Sunset" for data-id="1", got "${card1 ? card1.title : "null"}".`
+    );
+    console.assert(
+      card1.desc === "A beautiful sunset.",
+      `Stub 1 FAIL: expected desc "A beautiful sunset." for data-id="1", got "${card1 ? card1.desc : "null"}".`
+    );
+
+    const card3 = getCardInfo("3");
+    console.assert(
+      card3 !== null && card3.title === "Ocean",
+      `Stub 1 FAIL: expected title "Ocean" for data-id="3", got "${card3 ? card3.title : "null"}".`
+    );
+
+    const cardMissing = getCardInfo("99");
+    console.assert(
+      cardMissing === null,
+      `Stub 1 FAIL: expected null for nonexistent data-id="99", got ${JSON.stringify(cardMissing)}. ` +
+      `querySelector returns null when no match is found — check for this.`
+    );
+
+    // Tests for Stub 2
+    const result1 = findFirstBySelectors(["#nonexistent", ".card-title", "#gallery"]);
+    console.assert(
+      result1 === "Sunset",
+      `Stub 2 FAIL: expected "Sunset" (first .card-title), got "${result1}". ` +
+      `"#nonexistent" should return null from querySelector, so skip it and try ".card-title".`
+    );
+
+    const result2 = findFirstBySelectors(["#gallery .featured .card-desc"]);
+    console.assert(
+      result2 === "A beautiful sunset.",
+      `Stub 2 FAIL: expected "A beautiful sunset.", got "${result2}".`
+    );
+
+    const result3 = findFirstBySelectors(["#no", ".nope", "div.missing"]);
+    console.assert(
+      result3 === null,
+      `Stub 2 FAIL: expected null when no selectors match, got "${result3}". ` +
+      `Return null after exhausting all selectors.`
+    );
+
+    const result4 = findFirstBySelectors([]);
+    console.assert(
+      result4 === null,
+      `Stub 2 FAIL: expected null for empty selectors array, got "${result4}".`
+    );
+
+    console.log("All tests passed!");
+  </script>
+
+</body>
+</html>

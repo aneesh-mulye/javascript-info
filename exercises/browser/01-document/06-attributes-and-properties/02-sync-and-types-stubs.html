@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Attributes and Properties - Step 2 Stubs</title>
+</head>
+<body>
+
+  <input id="test-input" type="text" value="original">
+  <input id="test-checkbox" type="checkbox" checked>
+  <a id="test-link" href="/test-page">Link</a>
+
+  <script>
+    // ============================================================
+    // STUB 1: getAttrPropComparison
+    // ============================================================
+    // Write a function getAttrPropComparison(elem, attrName) that
+    // compares the attribute value and the DOM property value for a
+    // given attribute name.
+    //
+    // Return an object:
+    //   {
+    //     attrValue: the result of getAttribute(attrName),
+    //     propValue: the DOM property value (using the correct property
+    //                name -- 'class' -> 'className', 'for' -> 'htmlFor',
+    //                or same name otherwise),
+    //     attrType: typeof the attribute value,
+    //     propType: typeof the property value,
+    //     areSameValue: whether attrValue == propValue (loose equality),
+    //     areSameType: whether they are the same type
+    //   }
+    //
+    // If the attribute does not exist, attrValue should be null.
+    // If the property does not exist on the element, propValue should be undefined.
+    //
+    // This exercises the type differences between attributes (always
+    // strings or null) and properties (can be any type).
+
+    function getAttrPropComparison(elem, attrName) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // STUB 2: trackInputChanges
+    // ============================================================
+    // Write a function trackInputChanges(inputElem) that returns a
+    // tracker object with these methods:
+    //
+    //   setViaProperty(val) - sets inputElem.value = val
+    //   setViaAttribute(val) - sets the 'value' attribute via setAttribute
+    //   getState() - returns {
+    //     property: current inputElem.value,
+    //     attribute: current getAttribute('value'),
+    //     inSync: whether property and attribute are the same string
+    //   }
+    //   getOriginal() - returns the original value attribute that was
+    //     on the element when trackInputChanges was first called.
+    //
+    // This exercises the one-way sync behavior of input.value:
+    // - attribute -> property sync works until property is set directly
+    // - property changes never reflect back to the attribute
+    // - setAttribute('value', ...) represents the "default" value
+    //
+    // Use a closure to store the original value.
+
+    function trackInputChanges(inputElem) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // TESTS
+    // ============================================================
+
+    // --- Tests for getAttrPropComparison ---
+    const testCheckbox = document.getElementById('test-checkbox');
+
+    // Test 1: checked attribute - classic type difference
+    const checkedComp = getAttrPropComparison(testCheckbox, 'checked');
+    console.assert(
+      checkedComp.attrValue === '',
+      `getAttribute('checked') for a checked checkbox returns empty string '', ` +
+      `got ${JSON.stringify(checkedComp.attrValue)}. The 'checked' attribute is boolean ` +
+      `in HTML - its presence means true, its value is ''.`
+    );
+    console.assert(
+      checkedComp.propValue === true,
+      `The .checked DOM property is a boolean true, got ${JSON.stringify(checkedComp.propValue)}.`
+    );
+    console.assert(
+      checkedComp.attrType === 'string',
+      `getAttribute always returns a string (or null). Expected 'string', got '${checkedComp.attrType}'.`
+    );
+    console.assert(
+      checkedComp.propType === 'boolean',
+      `The checked property is a boolean. Expected 'boolean', got '${checkedComp.propType}'.`
+    );
+    console.assert(
+      checkedComp.areSameType === false,
+      `String and boolean are different types. areSameType should be false.`
+    );
+
+    // Test 2: href - full URL vs relative
+    const testLink = document.getElementById('test-link');
+    const hrefComp = getAttrPropComparison(testLink, 'href');
+    console.assert(
+      hrefComp.attrValue === '/test-page',
+      `getAttribute('href') should return the raw attribute '/test-page', ` +
+      `got '${hrefComp.attrValue}'.`
+    );
+    console.assert(
+      hrefComp.propValue.endsWith('/test-page'),
+      `The .href property should be a full URL ending with '/test-page', ` +
+      `got '${hrefComp.propValue}'.`
+    );
+    console.assert(
+      hrefComp.areSameValue === false,
+      `For relative hrefs, attribute (relative) and property (full URL) differ. ` +
+      `areSameValue should be false.`
+    );
+
+    // Test 3: id - attribute and property are the same
+    const idComp = getAttrPropComparison(testLink, 'id');
+    console.assert(
+      idComp.attrValue === 'test-link',
+      `getAttribute('id') should return 'test-link'.`
+    );
+    console.assert(
+      idComp.propValue === 'test-link',
+      `.id property should return 'test-link'.`
+    );
+    console.assert(
+      idComp.areSameValue === true,
+      `For 'id', attribute and property have the same value.`
+    );
+    console.assert(
+      idComp.areSameType === true,
+      `For 'id', both are strings, so same type.`
+    );
+
+    // Test 4: non-existent attribute
+    const missingComp = getAttrPropComparison(testLink, 'data-nonexistent');
+    console.assert(
+      missingComp.attrValue === null,
+      `getAttribute for a non-existent attribute should return null, ` +
+      `got ${JSON.stringify(missingComp.attrValue)}.`
+    );
+
+    // Test 5: class -> className mapping
+    testLink.setAttribute('class', 'my-class');
+    const classComp = getAttrPropComparison(testLink, 'class');
+    console.assert(
+      classComp.propValue === 'my-class',
+      `For 'class' attribute, should read the 'className' property. ` +
+      `Expected 'my-class', got '${classComp.propValue}'.`
+    );
+
+    // --- Tests for trackInputChanges ---
+    // Reset test input
+    const testInput = document.getElementById('test-input');
+    testInput.value = 'original';
+    testInput.setAttribute('value', 'original');
+
+    const tracker = trackInputChanges(testInput);
+
+    // Check initial state
+    const s0 = tracker.getState();
+    console.assert(
+      s0.property === 'original',
+      `Initial property should be 'original', got '${s0.property}'.`
+    );
+    console.assert(
+      s0.attribute === 'original',
+      `Initial attribute should be 'original', got '${s0.attribute}'.`
+    );
+    console.assert(
+      s0.inSync === true,
+      `Initially property and attribute should be in sync.`
+    );
+    console.assert(
+      tracker.getOriginal() === 'original',
+      `getOriginal should return 'original', got '${tracker.getOriginal()}'.`
+    );
+
+    // Set via property - attribute should NOT change
+    tracker.setViaProperty('typed-by-user');
+    const s1 = tracker.getState();
+    console.assert(
+      s1.property === 'typed-by-user',
+      `After setViaProperty, property should be 'typed-by-user', got '${s1.property}'.`
+    );
+    console.assert(
+      s1.attribute === 'original',
+      `After setViaProperty, attribute should still be 'original', got '${s1.attribute}'. ` +
+      `Property changes do NOT sync back to the attribute for input.value!`
+    );
+    console.assert(
+      s1.inSync === false,
+      `After property change, they should be out of sync.`
+    );
+
+    // Set via attribute - after property was already set, property should NOT change
+    tracker.setViaAttribute('new-default');
+    const s2 = tracker.getState();
+    console.assert(
+      s2.attribute === 'new-default',
+      `After setViaAttribute, attribute should be 'new-default', got '${s2.attribute}'.`
+    );
+    console.assert(
+      s2.property === 'typed-by-user',
+      `After property was already set directly, setAttribute should NOT update the property. ` +
+      `Property should still be 'typed-by-user', got '${s2.property}'. ` +
+      `This is the one-way sync gotcha: once the property is set, attribute changes stop syncing to it.`
+    );
+
+    // getOriginal should still return the value from when tracking started
+    console.assert(
+      tracker.getOriginal() === 'original',
+      `getOriginal should always return the original value 'original', got '${tracker.getOriginal()}'. ` +
+      `Use the closure to store this.`
+    );
+
+    console.log("All tests passed!");
+  </script>
+</body>
+</html>

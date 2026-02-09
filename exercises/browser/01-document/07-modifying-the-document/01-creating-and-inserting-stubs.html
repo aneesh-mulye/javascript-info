@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head><title>Step 1 Stubs: createElement, append/prepend/before/after</title></head>
+<body>
+
+<div id="sandbox1">
+  <p id="middle">Middle paragraph</p>
+</div>
+
+<hr>
+
+<ol id="sandbox2">
+  <li id="step-b">Step B</li>
+  <li id="step-d">Step D</li>
+</ol>
+
+<script>
+  // ============================================================
+  // STUB 1
+  //
+  // Given the #sandbox1 div which contains a <p> with id="middle":
+  //
+  // 1. Create a new <h2> element with textContent "Title" and
+  //    insert it as the FIRST child of #sandbox1 (before the <p>).
+  // 2. Create a new <footer> element with textContent "Footer" and
+  //    insert it as the LAST child of #sandbox1 (after the <p>).
+  // 3. Insert the plain text "---" directly before the <p> element
+  //    (between the <h2> and <p>), using the appropriate method
+  //    (it should become a text node, not an element).
+  // 4. Insert the plain text "***" directly after the <p> element
+  //    (between the <p> and <footer>).
+  //
+  // Final expected childNodes of #sandbox1 (in order):
+  //   <h2>Title</h2>
+  //   "---"
+  //   <p>Middle paragraph</p>
+  //   "***"
+  //   <footer>Footer</footer>
+  // ============================================================
+
+  const sandbox1 = document.getElementById('sandbox1');
+  const middle = document.getElementById('middle');
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 1 ---
+  (function testStub1() {
+    const nodes = sandbox1.childNodes;
+
+    console.assert(nodes.length === 5,
+      `STUB 1: Expected 5 childNodes, got ${nodes.length}. Did you create all 4 new nodes?`);
+
+    // Node 0: <h2>
+    console.assert(nodes[0].nodeType === 1 && nodes[0].tagName === 'H2',
+      `STUB 1: First child should be an <h2> element, got ${nodes[0].nodeName}`);
+    console.assert(nodes[0].textContent === 'Title',
+      `STUB 1: <h2> textContent should be "Title", got "${nodes[0].textContent}"`);
+
+    // Node 1: text "---"
+    console.assert(nodes[1].nodeType === 3,
+      `STUB 1: Second child should be a text node, got nodeType ${nodes[1].nodeType}. Remember: strings passed to before/after become text nodes.`);
+    console.assert(nodes[1].textContent === '---',
+      `STUB 1: Text node should contain "---", got "${nodes[1].textContent}"`);
+
+    // Node 2: <p>
+    console.assert(nodes[2].nodeType === 1 && nodes[2].tagName === 'P',
+      `STUB 1: Third child should be the <p>, got ${nodes[2].nodeName}`);
+    console.assert(nodes[2].textContent === 'Middle paragraph',
+      `STUB 1: <p> content should be "Middle paragraph", got "${nodes[2].textContent}"`);
+
+    // Node 3: text "***"
+    console.assert(nodes[3].nodeType === 3,
+      `STUB 1: Fourth child should be a text node, got nodeType ${nodes[3].nodeType}`);
+    console.assert(nodes[3].textContent === '***',
+      `STUB 1: Text node should contain "***", got "${nodes[3].textContent}"`);
+
+    // Node 4: <footer>
+    console.assert(nodes[4].nodeType === 1 && nodes[4].tagName === 'FOOTER',
+      `STUB 1: Fifth child should be a <footer>, got ${nodes[4].nodeName}`);
+    console.assert(nodes[4].textContent === 'Footer',
+      `STUB 1: <footer> textContent should be "Footer", got "${nodes[4].textContent}"`);
+
+    console.log('STUB 1: All tests passed!');
+  })();
+
+
+  // ============================================================
+  // STUB 2
+  //
+  // Given the <ol id="sandbox2"> which currently contains:
+  //   <li id="step-b">Step B</li>
+  //   <li id="step-d">Step D</li>
+  //
+  // 1. Create <li> elements for "Step A", "Step C", and "Step E".
+  // 2. Insert them so the final order of <li> children is:
+  //    Step A, Step B, Step C, Step D, Step E
+  //    Use before/after/prepend/append as appropriate.
+  // 3. Now MOVE "Step E" to be the FIRST child of the <ol>
+  //    (using a single insertion call — remember that inserting
+  //     a node that's already in the DOM moves it).
+  //    Final order: Step E, Step A, Step B, Step C, Step D
+  // ============================================================
+
+  const sandbox2 = document.getElementById('sandbox2');
+  const stepB = document.getElementById('step-b');
+  const stepD = document.getElementById('step-d');
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 2 ---
+  (function testStub2() {
+    const items = sandbox2.children; // HTMLCollection of <li> elements
+
+    console.assert(items.length === 5,
+      `STUB 2: Expected 5 <li> elements, got ${items.length}. Did you create all three new items?`);
+
+    const expectedOrder = ['Step E', 'Step A', 'Step B', 'Step C', 'Step D'];
+    const actualOrder = Array.from(items).map(li => li.textContent);
+
+    console.assert(
+      actualOrder.join(', ') === expectedOrder.join(', '),
+      `STUB 2: Expected order [${expectedOrder.join(', ')}] but got [${actualOrder.join(', ')}]. ` +
+      `Remember: the final step moves Step E to the front.`
+    );
+
+    // Verify the original elements are the same DOM nodes (not recreated)
+    console.assert(items[2] === stepB,
+      'STUB 2: The "Step B" element should be the same DOM node as the original, not a new one.');
+    console.assert(items[4] === stepD,
+      'STUB 2: The "Step D" element should be the same DOM node as the original, not a new one.');
+
+    console.log('STUB 2: All tests passed!');
+  })();
+</script>
+</body>
+</html>

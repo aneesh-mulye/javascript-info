@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Node Properties - Step 2 Stubs</title>
+</head>
+<body>
+
+  <div id="sandbox">
+    <p id="original">This will be replaced</p>
+  </div>
+
+  <div id="display-area">
+    <span id="display">initial</span>
+  </div>
+
+  <script>
+    // ============================================================
+    // STUB 1: safeSetContent
+    // ============================================================
+    // Write a function safeSetContent(elem, content, asHTML) that:
+    // - If asHTML is true, sets the content using innerHTML
+    // - If asHTML is false (or not provided), sets the content using
+    //   textContent (this is the safe/default behavior)
+    // - Returns an object:
+    //   {
+    //     method: 'innerHTML' or 'textContent' (whichever was used),
+    //     childCount: number of child nodes after setting,
+    //     containsElements: boolean - true if any child is an element node
+    //   }
+    //
+    // This exercises the security difference between innerHTML and textContent.
+
+    function safeSetContent(elem, content, asHTML) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // STUB 2: replaceWithOuter
+    // ============================================================
+    // Write a function replaceWithOuter(elemId, newOuterHTML) that:
+    // 1. Finds the element by its id.
+    // 2. Stores the element's current textContent before replacement.
+    // 3. Replaces it using outerHTML assignment.
+    // 4. Attempts to find the NEW element in the DOM (by parsing
+    //    newOuterHTML to extract its id -- you can use a regex or
+    //    create a temporary element for this).
+    // 5. Returns an object:
+    //    {
+    //      oldText: the textContent before replacement,
+    //      newElementFound: boolean - whether the new element was found in DOM,
+    //      newText: the textContent of the new element (or null if not found)
+    //    }
+    //
+    // This exercises the outerHTML gotcha: after assignment, you must
+    // re-query the DOM to get the new element.
+
+    function replaceWithOuter(elemId, newOuterHTML) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // TESTS
+    // ============================================================
+
+    // --- Tests for safeSetContent ---
+    const display = document.getElementById('display');
+
+    // Test 1: textContent (safe mode, default)
+    const r1 = safeSetContent(display, '<b>bold</b>', false);
+    console.assert(
+      r1.method === 'textContent',
+      `Expected method 'textContent' when asHTML is false, got '${r1.method}'.`
+    );
+    console.assert(
+      r1.containsElements === false,
+      `textContent should not create element children. containsElements should be false. ` +
+      `textContent inserts everything as plain text, not parsed HTML.`
+    );
+    console.assert(
+      r1.childCount === 1,
+      `After textContent assignment, there should be exactly 1 child (a text node), got ${r1.childCount}.`
+    );
+    console.assert(
+      display.textContent === '<b>bold</b>',
+      `textContent should show the literal string '<b>bold</b>', got '${display.textContent}'. ` +
+      `textContent does NOT parse HTML tags.`
+    );
+
+    // Test 2: innerHTML (unsafe mode)
+    const r2 = safeSetContent(display, '<b>bold</b>', true);
+    console.assert(
+      r2.method === 'innerHTML',
+      `Expected method 'innerHTML' when asHTML is true, got '${r2.method}'.`
+    );
+    console.assert(
+      r2.containsElements === true,
+      `innerHTML should create element children for '<b>bold</b>'. containsElements should be true. ` +
+      `innerHTML parses the string as HTML.`
+    );
+    console.assert(
+      display.textContent === 'bold',
+      `After innerHTML='<b>bold</b>', textContent should be 'bold', got '${display.textContent}'.`
+    );
+
+    // Test 3: default parameter (asHTML not provided) should use textContent
+    const r3 = safeSetContent(display, '<script>alert("xss")<\/script>');
+    console.assert(
+      r3.method === 'textContent',
+      `When asHTML is omitted, should default to textContent, got '${r3.method}'.`
+    );
+    console.assert(
+      r3.containsElements === false,
+      `Default (textContent) mode should not create element children, even for script tags.`
+    );
+
+    // Test 4: innerHTML with malicious content creates elements
+    const r4 = safeSetContent(display, '<img src=x onerror="alert(1)">', true);
+    console.assert(
+      r4.containsElements === true,
+      `innerHTML with '<img ...>' should create an element child.`
+    );
+
+    // --- Tests for replaceWithOuter ---
+    // Reset sandbox
+    document.getElementById('sandbox').innerHTML = '<p id="original">This will be replaced</p>';
+
+    const r5 = replaceWithOuter('original', '<h2 id="replaced">New heading</h2>');
+    console.assert(
+      r5.oldText === 'This will be replaced',
+      `oldText should be 'This will be replaced', got '${r5.oldText}'.`
+    );
+    console.assert(
+      r5.newElementFound === true,
+      `The new element with id='replaced' should be found in the DOM after outerHTML replacement. ` +
+      `Remember: outerHTML replaces the element in the DOM, but you must re-query to get the new one.`
+    );
+    console.assert(
+      r5.newText === 'New heading',
+      `newText should be 'New heading', got '${r5.newText}'.`
+    );
+
+    // Verify the DOM was actually changed
+    console.assert(
+      document.getElementById('original') === null,
+      `The old element with id='original' should no longer exist in the DOM after outerHTML replacement.`
+    );
+    console.assert(
+      document.getElementById('replaced') !== null,
+      `The new element with id='replaced' should exist in the DOM.`
+    );
+
+    // Test with a replacement that has no id
+    document.getElementById('sandbox').innerHTML = '<p id="temp">Temporary</p>';
+    const r6 = replaceWithOuter('temp', '<span>No id here</span>');
+    console.assert(
+      r6.oldText === 'Temporary',
+      `oldText should be 'Temporary', got '${r6.oldText}'.`
+    );
+    console.assert(
+      r6.newElementFound === false,
+      `When the new outerHTML has no id, newElementFound should be false. ` +
+      `There's no id to query for.`
+    );
+    console.assert(
+      r6.newText === null,
+      `When new element is not found, newText should be null, got '${r6.newText}'.`
+    );
+
+    console.log("All tests passed!");
+  </script>
+</body>
+</html>

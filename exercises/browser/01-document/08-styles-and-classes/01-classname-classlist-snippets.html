@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Step 1 Snippets: className and classList</title>
+<style>
+  .highlight { background: yellow; }
+  .bold { font-weight: bold; }
+  .active { color: blue; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<div id="box1" class="highlight bold">Box 1</div>
+<div id="box2" class="active">Box 2</div>
+
+<script>
+  // ============================================================
+  // SNIPPET 1
+  // className is the full class string. Setting it REPLACES all.
+  // classList methods are additive/subtractive.
+  // classList.toggle returns a boolean.
+  // ============================================================
+
+  const box1 = document.getElementById('box1');
+
+  console.log(box1.className);
+
+  // classList.contains checks for a specific class
+  console.log(box1.classList.contains('highlight'));
+  console.log(box1.classList.contains('active'));
+
+  // classList.add is additive — doesn't remove existing classes
+  box1.classList.add('active');
+  console.log(box1.className);
+
+  // classList.remove removes only the specified class
+  box1.classList.remove('bold');
+  console.log(box1.className);
+
+  // Now set className directly — this REPLACES everything
+  box1.className = 'hidden';
+  console.log(box1.className);
+  console.log(box1.classList.contains('highlight'));
+  console.log(box1.classList.contains('hidden'));
+  console.log(box1.classList.length);
+
+  // YOUR ANSWER:
+
+
+  // ============================================================
+  // SNIPPET 2
+  // classList.toggle: adds if absent, removes if present.
+  // Returns true if class was ADDED, false if REMOVED.
+  // classList.add/remove accept multiple arguments.
+  // ============================================================
+
+  const box2 = document.getElementById('box2');
+
+  console.log(box2.className);
+
+  // toggle 'active' — it's present, so it gets removed
+  const result1 = box2.classList.toggle('active');
+  console.log(result1);
+  console.log(box2.className);
+
+  // toggle 'active' again — it's absent, so it gets added
+  const result2 = box2.classList.toggle('active');
+  console.log(result2);
+
+  // toggle 'highlight' — absent, so added
+  const result3 = box2.classList.toggle('highlight');
+  console.log(result3);
+  console.log(box2.className);
+
+  // classList.add with multiple args
+  box2.classList.add('bold', 'hidden');
+  console.log(box2.classList.length);
+
+  // classList.remove with multiple args
+  box2.classList.remove('highlight', 'hidden');
+
+  // What classes remain?
+  const remaining = Array.from(box2.classList).sort().join(' ');
+  console.log(remaining);
+
+  // YOUR ANSWER:
+
+
+</script>
+</body>
+</html>

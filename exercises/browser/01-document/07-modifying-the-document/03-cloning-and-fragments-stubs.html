@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head><title>Step 3 Stubs: cloneNode and DocumentFragment</title></head>
+<body>
+
+<div id="sandbox1">
+  <div id="template-card" class="card">
+    <h3 class="card-title">Template Title</h3>
+    <p class="card-body">Template body text.</p>
+  </div>
+</div>
+
+<div id="card-container"></div>
+
+<hr>
+
+<div id="sandbox2">
+  <ul id="target-list"></ul>
+</div>
+
+<script>
+  // ============================================================
+  // STUB 1
+  //
+  // You have a "template" card element (#template-card).
+  //
+  // 1. Create 3 cards by deep-cloning the template card.
+  //    For card i (0, 1, 2):
+  //      - Set its id to "card-" + i
+  //      - Set the .card-title text to "Card " + i
+  //      - Set the .card-body text to "Body of card " + i
+  //
+  // 2. Append all 3 cloned cards to #card-container.
+  //
+  // 3. Remove the original template card from #sandbox1
+  //    (it was just a template, not meant to display).
+  //
+  // The cloned cards must be independent: verify by checking
+  // that modifying one doesn't affect others.
+  // ============================================================
+
+  const templateCard = document.getElementById('template-card');
+  const cardContainer = document.getElementById('card-container');
+  const sandbox1 = document.getElementById('sandbox1');
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 1 ---
+  (function testStub1() {
+    // Template should be removed
+    console.assert(document.getElementById('template-card') === null,
+      'STUB 1: The original template card should be removed from the DOM.');
+    console.assert(sandbox1.children.length === 0,
+      `STUB 1: #sandbox1 should be empty after removing the template. Got ${sandbox1.children.length} children.`);
+
+    // Card container should have 3 cards
+    console.assert(cardContainer.children.length === 3,
+      `STUB 1: #card-container should have 3 children, got ${cardContainer.children.length}.`);
+
+    for (let i = 0; i < 3; i++) {
+      const card = document.getElementById('card-' + i);
+      console.assert(card !== null,
+        `STUB 1: Could not find element with id "card-${i}". Did you set the id?`);
+      console.assert(card.classList.contains('card'),
+        `STUB 1: card-${i} should have class "card" (from the deep clone).`);
+
+      const title = card.querySelector('.card-title');
+      console.assert(title !== null,
+        `STUB 1: card-${i} should have a .card-title child (from deep clone).`);
+      console.assert(title.textContent === 'Card ' + i,
+        `STUB 1: card-${i} title should be "Card ${i}", got "${title.textContent}".`);
+
+      const body = card.querySelector('.card-body');
+      console.assert(body !== null,
+        `STUB 1: card-${i} should have a .card-body child (from deep clone).`);
+      console.assert(body.textContent === 'Body of card ' + i,
+        `STUB 1: card-${i} body should be "Body of card ${i}", got "${body.textContent}".`);
+    }
+
+    // Independence check: modifying card-0's title shouldn't affect card-1
+    const card0title = document.getElementById('card-0').querySelector('.card-title');
+    const card1title = document.getElementById('card-1').querySelector('.card-title');
+    const saved = card0title.textContent;
+    card0title.textContent = 'MODIFIED';
+    console.assert(card1title.textContent === 'Card 1',
+      'STUB 1: Modifying card-0 title should NOT affect card-1. Cloned nodes must be independent.');
+    card0title.textContent = saved; // restore
+
+    console.log('STUB 1: All tests passed!');
+  })();
+
+
+  // ============================================================
+  // STUB 2
+  //
+  // Build a list of items using a DocumentFragment for batch insertion.
+  //
+  // Given the array of data below:
+  //   const data = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter'];
+  //
+  // 1. Create a DocumentFragment.
+  // 2. For each item in `data`, create an <li> element with:
+  //      - textContent set to the planet name
+  //      - a data-index attribute set to the item's index (as a string)
+  //    Append each <li> to the fragment.
+  //    (Hint: use forEach or a similar array method.)
+  //
+  // 3. Append the fragment to #target-list.
+  //
+  // 4. After appending, verify the fragment is empty (it should
+  //    be — its children moved to the list). Store fragment.childNodes.length
+  //    in a variable called `fragmentRemaining`.
+  // ============================================================
+
+  const targetList = document.getElementById('target-list');
+  const data = ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter'];
+
+  let fragmentRemaining;
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 2 ---
+  (function testStub2() {
+    const items = targetList.children;
+    console.assert(items.length === 5,
+      `STUB 2: #target-list should have 5 <li> children, got ${items.length}. Did you append the fragment?`);
+
+    data.forEach((planet, i) => {
+      console.assert(items[i].tagName === 'LI',
+        `STUB 2: Child ${i} should be an <li>, got <${items[i].tagName}>.`);
+      console.assert(items[i].textContent === planet,
+        `STUB 2: Item ${i} textContent should be "${planet}", got "${items[i].textContent}".`);
+      console.assert(items[i].getAttribute('data-index') === String(i),
+        `STUB 2: Item ${i} should have data-index="${i}", got "${items[i].getAttribute('data-index')}". ` +
+        `Remember to use setAttribute or dataset.`);
+    });
+
+    console.assert(fragmentRemaining === 0,
+      `STUB 2: After insertion, fragment.childNodes.length should be 0 (fragment dissolves), ` +
+      `got ${fragmentRemaining}. Did you check it AFTER appending to the list?`);
+
+    console.log('STUB 2: All tests passed!');
+  })();
+</script>
+</body>
+</html>

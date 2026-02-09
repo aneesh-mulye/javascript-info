@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head><title>Step 4 Stubs: Complex DOM restructuring</title></head>
+<body>
+
+<div id="sandbox1">
+  <table id="source-table">
+    <thead><tr><th>Name</th><th>Age</th><th>City</th></tr></thead>
+    <tbody id="source-tbody"></tbody>
+  </table>
+  <table id="dest-table">
+    <thead><tr><th>Name</th><th>City</th></tr></thead>
+    <tbody id="dest-tbody"></tbody>
+  </table>
+</div>
+
+<hr>
+
+<div id="sandbox2">
+  <div id="source-container">
+    <div class="widget" data-category="chart">Bar Chart</div>
+    <div class="widget" data-category="stat">User Count</div>
+    <div class="widget" data-category="chart">Line Graph</div>
+    <div class="widget" data-category="table">Data Grid</div>
+    <div class="widget" data-category="stat">Revenue</div>
+    <div class="widget" data-category="table">Log Viewer</div>
+  </div>
+  <div id="dashboard"></div>
+</div>
+
+<script>
+  // ============================================================
+  // STUB 1
+  //
+  // Build a table from data, then restructure it.
+  //
+  // Given the array of objects:
+  const people = [
+    { name: 'Alice', age: 30, city: 'Portland' },
+    { name: 'Bob', age: 25, city: 'Seattle' },
+    { name: 'Charlie', age: 35, city: 'Portland' },
+    { name: 'Diana', age: 28, city: 'Seattle' },
+    { name: 'Eve', age: 32, city: 'Portland' },
+  ];
+  //
+  // Part A: Populate #source-tbody
+  //   - Use a DocumentFragment to batch-create <tr> rows.
+  //   - Each <tr> has 3 <td> cells: name, age, city.
+  //   - Set a data-name attribute on each <tr> to the person's name.
+  //   - Append the fragment to #source-tbody.
+  //
+  // Part B: Move Portland residents to #dest-table
+  //   - Find all <tr> in #source-tbody where the city (3rd <td>)
+  //     is "Portland".
+  //   - For each such row, create a NEW <tr> with only 2 <td>:
+  //     name and city (skip age). Append to #dest-tbody.
+  //   - REMOVE the original row from #source-tbody.
+  //   (Use array methods: filter, forEach, etc.)
+  //
+  // After this:
+  //   #source-tbody has 2 rows (Bob, Diana — Seattle people)
+  //   #dest-tbody has 3 rows (Alice, Charlie, Eve — Portland people,
+  //     but with only Name and City columns)
+  // ============================================================
+
+  const sourceTbody = document.getElementById('source-tbody');
+  const destTbody = document.getElementById('dest-tbody');
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 1 ---
+  (function testStub1() {
+    // Source table checks
+    const sourceRows = sourceTbody.querySelectorAll('tr');
+    console.assert(sourceRows.length === 2,
+      `STUB 1: #source-tbody should have 2 rows (Seattle people), got ${sourceRows.length}.`);
+
+    const sourceNames = Array.from(sourceRows).map(tr => tr.querySelector('td').textContent);
+    console.assert(sourceNames.includes('Bob') && sourceNames.includes('Diana'),
+      `STUB 1: Source table should contain Bob and Diana, got [${sourceNames.join(', ')}].`);
+
+    // Each source row should still have 3 cells
+    sourceRows.forEach(tr => {
+      console.assert(tr.querySelectorAll('td').length === 3,
+        `STUB 1: Source table rows should have 3 cells (name, age, city). Got ${tr.querySelectorAll('td').length}.`);
+    });
+
+    // Dest table checks
+    const destRows = destTbody.querySelectorAll('tr');
+    console.assert(destRows.length === 3,
+      `STUB 1: #dest-tbody should have 3 rows (Portland people), got ${destRows.length}.`);
+
+    const destData = Array.from(destRows).map(tr => {
+      const tds = tr.querySelectorAll('td');
+      return { name: tds[0].textContent, cols: tds.length };
+    });
+
+    const expectedNames = ['Alice', 'Charlie', 'Eve'];
+    destData.forEach((row, i) => {
+      console.assert(row.name === expectedNames[i],
+        `STUB 1: Dest row ${i} name should be "${expectedNames[i]}", got "${row.name}".`);
+      console.assert(row.cols === 2,
+        `STUB 1: Dest table rows should have 2 cells (name, city only — no age). Got ${row.cols}.`);
+    });
+
+    // Verify dest rows have city "Portland"
+    destRows.forEach(tr => {
+      const city = tr.querySelectorAll('td')[1].textContent;
+      console.assert(city === 'Portland',
+        `STUB 1: All dest rows should have city "Portland", got "${city}".`);
+    });
+
+    console.log('STUB 1: All tests passed!');
+  })();
+
+
+  // ============================================================
+  // STUB 2
+  //
+  // Reorganize widgets from #source-container into a #dashboard
+  // grouped by category.
+  //
+  // The source container has 6 .widget divs, each with a
+  // data-category attribute: "chart", "stat", or "table".
+  //
+  // 1. Read all .widget elements from #source-container into an
+  //    array. Group them by data-category.
+  //    (Use reduce or a manual loop — Part 1 skills.)
+  //
+  // 2. For each category (in alphabetical order: chart, stat, table):
+  //    - Create a <section> element with class "category-section"
+  //      and a data-category attribute set to the category name.
+  //    - Create an <h3> with the category name (capitalized, e.g.,
+  //      "Chart", "Stat", "Table") and prepend it to the section.
+  //    - MOVE each widget from the source container into this section
+  //      (by appending the original DOM node — don't clone).
+  //
+  // 3. Use a DocumentFragment to batch-append all sections to #dashboard.
+  //
+  // After this:
+  //   - #source-container should be empty (all widgets moved out).
+  //   - #dashboard should have 3 <section> children.
+  //   - Each section has an <h3> + the widgets for that category.
+  // ============================================================
+
+  const sourceContainer = document.getElementById('source-container');
+  const dashboard = document.getElementById('dashboard');
+
+  // YOUR CODE HERE:
+
+
+
+  // --- TESTS FOR STUB 2 ---
+  (function testStub2() {
+    // Source should be empty
+    console.assert(sourceContainer.children.length === 0,
+      `STUB 2: #source-container should be empty (widgets moved out), got ${sourceContainer.children.length} children.`);
+
+    // Dashboard should have 3 sections
+    const sections = dashboard.querySelectorAll('section.category-section');
+    console.assert(sections.length === 3,
+      `STUB 2: #dashboard should have 3 <section> elements, got ${sections.length}.`);
+
+    const expectedCategories = [
+      { cat: 'chart', widgets: ['Bar Chart', 'Line Graph'] },
+      { cat: 'stat', widgets: ['User Count', 'Revenue'] },
+      { cat: 'table', widgets: ['Data Grid', 'Log Viewer'] },
+    ];
+
+    expectedCategories.forEach(({ cat, widgets }, i) => {
+      const section = sections[i];
+      console.assert(section.dataset.category === cat,
+        `STUB 2: Section ${i} should have data-category="${cat}", got "${section.dataset.category}". ` +
+        `Sections should be in alphabetical order.`);
+
+      const heading = section.querySelector('h3');
+      console.assert(heading !== null,
+        `STUB 2: Section "${cat}" should have an <h3> heading.`);
+      const expectedTitle = cat.charAt(0).toUpperCase() + cat.slice(1);
+      console.assert(heading.textContent === expectedTitle,
+        `STUB 2: Section "${cat}" heading should be "${expectedTitle}", got "${heading.textContent}".`);
+
+      const sectionWidgets = section.querySelectorAll('.widget');
+      console.assert(sectionWidgets.length === widgets.length,
+        `STUB 2: Section "${cat}" should have ${widgets.length} widgets, got ${sectionWidgets.length}.`);
+
+      widgets.forEach((wText, j) => {
+        console.assert(sectionWidgets[j].textContent === wText,
+          `STUB 2: Section "${cat}" widget ${j} should be "${wText}", got "${sectionWidgets[j].textContent}".`);
+      });
+    });
+
+    // Verify these are the SAME DOM nodes (moved, not cloned)
+    const allWidgets = dashboard.querySelectorAll('.widget');
+    console.assert(allWidgets.length === 6,
+      `STUB 2: Dashboard should contain all 6 original widgets, got ${allWidgets.length}.`);
+
+    console.log('STUB 2: All tests passed!');
+  })();
+</script>
+</body>
+</html>

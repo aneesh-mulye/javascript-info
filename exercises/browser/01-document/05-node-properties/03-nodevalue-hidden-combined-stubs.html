@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Node Properties - Step 3 Stubs</title>
+</head>
+<body>
+
+  <div id="annotated">
+    <!-- author: Alice -->
+    <p>First paragraph</p>
+    <!-- reviewer: Bob -->
+    <p>Second paragraph</p>
+    <!-- status: approved -->
+  </div>
+
+  <ul id="items">
+    <li>Apple</li>
+    <li hidden>Banana</li>
+    <li>Cherry</li>
+    <li hidden>Date</li>
+    <li>Elderberry</li>
+  </ul>
+
+  <script>
+    // ============================================================
+    // STUB 1: extractCommentData
+    // ============================================================
+    // Write a function extractCommentData(elem) that scans ALL
+    // descendant nodes (not just direct children) of elem, finds
+    // every comment node, parses its text as "key: value" format,
+    // and returns an object mapping keys to values.
+    //
+    // For example, given the #annotated div above, it should return:
+    //   { author: "Alice", reviewer: "Bob", status: "approved" }
+    //
+    // - Use a TreeWalker or recursive traversal to find comment nodes.
+    //   (NodeFilter.SHOW_COMMENT = 128 for TreeWalker, or just recurse
+    //   through childNodes checking nodeType === 8.)
+    // - Use node.data (or node.nodeValue) to get the comment text.
+    // - Trim whitespace. Split on the first ':' only.
+    // - If a comment doesn't match "key: value" format, skip it.
+    //
+    // Hint: you could use a closure over the result object while
+    // recursing, or use Array methods if you collect nodes first.
+
+    function extractCommentData(elem) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // STUB 2: toggleByContent
+    // ============================================================
+    // Write a function toggleByContent(listElem, filterFn) that:
+    // 1. Iterates over all <li> children of listElem.
+    // 2. For each <li>, calls filterFn(text) where text is the
+    //    li's textContent.
+    // 3. If filterFn returns true, the <li> should be visible
+    //    (hidden = false). If false, it should be hidden
+    //    (hidden = true).
+    // 4. Returns an object:
+    //    {
+    //      total: total number of <li> elements,
+    //      shown: number of now-visible items,
+    //      hidden: number of now-hidden items,
+    //      visibleTexts: array of textContent of visible items (in order)
+    //    }
+    //
+    // This exercises: hidden property, textContent reading,
+    // and takes a function argument (closure/callback from Part 1).
+
+    function toggleByContent(listElem, filterFn) {
+      // YOUR CODE HERE
+    }
+
+
+    // ============================================================
+    // TESTS
+    // ============================================================
+
+    // --- Tests for extractCommentData ---
+    const annotated = document.getElementById('annotated');
+    const commentData = extractCommentData(annotated);
+
+    console.assert(
+      typeof commentData === 'object' && commentData !== null,
+      "extractCommentData should return an object."
+    );
+    console.assert(
+      commentData.author === 'Alice',
+      `Expected author to be 'Alice', got '${commentData.author}'. ` +
+      `Make sure you're reading comment node data and trimming whitespace.`
+    );
+    console.assert(
+      commentData.reviewer === 'Bob',
+      `Expected reviewer to be 'Bob', got '${commentData.reviewer}'.`
+    );
+    console.assert(
+      commentData.status === 'approved',
+      `Expected status to be 'approved', got '${commentData.status}'.`
+    );
+    console.assert(
+      Object.keys(commentData).length === 3,
+      `Expected exactly 3 keys, got ${Object.keys(commentData).length}. ` +
+      `Only comments in "key: value" format should be included.`
+    );
+
+    // Test with a container that has no comments
+    const emptyDiv = document.createElement('div');
+    emptyDiv.innerHTML = '<p>No comments here</p>';
+    const emptyResult = extractCommentData(emptyDiv);
+    console.assert(
+      Object.keys(emptyResult).length === 0,
+      `For an element with no comments, should return empty object, ` +
+      `got ${JSON.stringify(emptyResult)}.`
+    );
+
+    // Test with nested comments
+    const nested = document.createElement('div');
+    nested.innerHTML = '<div><!-- level: deep --><span><!-- color: blue --></span></div>';
+    const nestedResult = extractCommentData(nested);
+    console.assert(
+      nestedResult.level === 'deep',
+      `Should find comments nested inside child elements. ` +
+      `Expected level='deep', got '${nestedResult.level}'.`
+    );
+    console.assert(
+      nestedResult.color === 'blue',
+      `Should find deeply nested comments. ` +
+      `Expected color='blue', got '${nestedResult.color}'.`
+    );
+
+    // Test with comment that has colon in value
+    const colonTest = document.createElement('div');
+    colonTest.innerHTML = '<!-- url: https://example.com -->';
+    const colonResult = extractCommentData(colonTest);
+    console.assert(
+      colonResult.url === 'https://example.com',
+      `Should split on first colon only. Expected 'https://example.com', ` +
+      `got '${colonResult.url}'. Values can contain colons.`
+    );
+
+    // --- Tests for toggleByContent ---
+    const items = document.getElementById('items');
+
+    // First, show all items (reset any hidden state)
+    const r1 = toggleByContent(items, () => true);
+    console.assert(
+      r1.total === 5,
+      `Expected 5 total <li> elements, got ${r1.total}.`
+    );
+    console.assert(
+      r1.shown === 5,
+      `When filterFn always returns true, all 5 should be shown, got ${r1.shown}.`
+    );
+    console.assert(
+      r1.hidden === 0,
+      `When filterFn always returns true, 0 should be hidden, got ${r1.hidden}.`
+    );
+    console.assert(
+      r1.visibleTexts.length === 5,
+      `visibleTexts should have 5 entries, got ${r1.visibleTexts.length}.`
+    );
+
+    // Now filter: only items whose textContent length > 5
+    const r2 = toggleByContent(items, text => text.length > 5);
+    console.assert(
+      r2.shown === 3,
+      `Items with text longer than 5 chars: Banana(6), Cherry(6), Elderberry(10). ` +
+      `Expected 3 shown, got ${r2.shown}. Apple(5) and Date(4) should be hidden.`
+    );
+    console.assert(
+      r2.hidden === 2,
+      `Expected 2 hidden, got ${r2.hidden}.`
+    );
+    console.assert(
+      JSON.stringify(r2.visibleTexts) === JSON.stringify(['Banana', 'Cherry', 'Elderberry']),
+      `Expected visible texts ['Banana', 'Cherry', 'Elderberry'], got ${JSON.stringify(r2.visibleTexts)}. ` +
+      `Make sure to set hidden=false for matching items (they might have been hidden initially).`
+    );
+
+    // Verify the DOM actually changed
+    const allLis = items.querySelectorAll('li');
+    console.assert(
+      allLis[0].hidden === true,
+      `'Apple' (5 chars, not > 5) should be hidden in the DOM.`
+    );
+    console.assert(
+      allLis[1].hidden === false,
+      `'Banana' (6 chars, > 5) should be visible in the DOM. ` +
+      `Remember: toggleByContent must OVERRIDE the original hidden state.`
+    );
+
+    // Filter with closure: only items starting with vowels
+    const vowels = new Set(['A', 'E', 'I', 'O', 'U']);
+    const r3 = toggleByContent(items, text => vowels.has(text[0]));
+    console.assert(
+      r3.shown === 2,
+      `Items starting with vowels: Apple, Elderberry. Expected 2 shown, got ${r3.shown}.`
+    );
+    console.assert(
+      JSON.stringify(r3.visibleTexts) === JSON.stringify(['Apple', 'Elderberry']),
+      `Expected ['Apple', 'Elderberry'], got ${JSON.stringify(r3.visibleTexts)}.`
+    );
+
+    console.log("All tests passed!");
+  </script>
+</body>
+</html>
